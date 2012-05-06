@@ -1,0 +1,28 @@
+<question type="output">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Mixed Expressions</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program? (5 decimal places)
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	int `s0` = `s1`;
+
+	cout &lt;&lt; `s3`.`s3``s2``s0` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s0">randset(array("x","y"))</substitution>
+		<substitution val="s1">rand(2,4)</substitution>
+		<substitution val="s3">randset(array("2","4","6"))</substitution>
+		<substitution val="s2">randset(array("-","+","/","/"))</substitution>
+	</substitutions>
+</question>

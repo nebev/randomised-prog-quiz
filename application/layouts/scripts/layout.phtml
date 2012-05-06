@@ -1,0 +1,158 @@
+<?php 
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
+$this->headTitle()->setSeparator(' - ');
+$this->headTitle(QUIZ_SYSTEM_NAME);
+
+//echo $this->doctype(); 
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML xmlns="http://www.w3.org/1999/xhtml" lang="en"><!-- InstanceBegin template="/Templates/3-col.dwt" codeOutsideHTMLIsLocked="false" --><HEAD><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<!-- InstanceBeginEditable name="HeadTitle" -->
+	<STYLE type="text/css">
+<!--
+.style1 {color: #00955f}
+-->
+    </STYLE>
+	<STYLE type="text/css">
+<!--
+.style2 {color: #FFFFFF; }
+-->
+    </STYLE>
+
+    <?php echo $this->headMeta(); ?> 
+    <?php echo $this->headTitle(); ?>
+    <?php 
+		echo $this->headLink()
+			->prependStylesheet($this->baseUrl().'/css/colors.css') 
+			->prependStylesheet($this->baseUrl().'/css/styles.css') 
+			->prependStylesheet($this->baseUrl().'/css/thickbox.css')
+			->prependStylesheet($this->baseUrl().'/css/rqz.css')
+			->prependStylesheet($this->baseUrl().'/css/datePicker.css'); 
+	?>
+	
+	<script src="<?php echo $this->baseUrl(); ?>/js/jquery.min.js" type="text/javascript"></script>
+
+
+	
+	
+</HEAD><BODY id="department" class="two-column">
+<!--ADD CLASS 'TWO-COLUMN' TO BODY TAG TO REMOVE RIGHT COLUMN (COLUMN-3) FROM LAYOUT-->
+<P class="hide"><A href="http://www.comp.mq.edu.au/#content">Skip to Content</A></P>
+
+<!-- BEGIN NO CHANGE SECTION -->
+
+<DIV id="wrapper">
+
+	<DIV id="banner">
+
+		<DIV id="logo">
+
+        	<H1><?php echo $this->escape($this->title); ?></H1>
+
+			<A href="http://www.mq.edu.au/"><IMG src="<?php echo $this->baseUrl(); ?>/images/logo.png" width="192" height="64" title="Macquarie University, Sydney" alt="Macquarie University, Sydney"></A><A href="http://www.mq.edu.au/science/"><IMG src="<?php echo $this->baseUrl(); ?>/images/logo_faculty.png" width="215" height="61" title="Faculty of Science" alt="Faculty of Science"></A>
+
+		</DIV><!--/logo-->
+		<DIV id="banner-nav"> 
+ 
+			<DIV id="nav-top"> 
+<?php
+		if(isset($this->username)){
+?>
+				<UL>
+					<LI><a href='<?php echo $this->url(array("controller" => "index", "action" => "userinfo")); ?>'>Logged in as <?php echo $this->username; ?></a> | </LI> 
+					<LI><a href='<?php echo $this->url(array("controller" => "auth", "action" => "logout")); ?>'>Logout</a></LI> 
+				</UL>
+<?php
+		}else{
+?>
+			<UL>
+				<LI><a href='#'>Please Log In</a></LI> 
+			</UL>
+
+<?php
+		}
+?>
+			</div> <!--End Nav-top -->
+		</div> <!-- End banner-nav -->
+
+
+	</DIV><!--/banner-->
+
+	<DIV class="break"></DIV>
+
+	<DIV id="content">
+
+		<DIV id="column-1">
+
+			<DIV class="department-image bg-left"></DIV>
+
+<!-------------------------END NO CHANGE SECTION---------------------------->            <!--BEGIN LEFT NAV AREA-->
+			<DIV id="nav-left">
+
+				<?php
+		if( isset($this->username) ){
+			Model_XML_Menu::draw( array("student", "admin"), array(), array("admin" => $this->is_admin) );
+		}
+				?>
+
+			</DIV><!--/nav-left-->
+		</DIV><!--/left-column-->
+
+		<DIV id="content-columns">
+			<DIV class="department-image bg-right">
+            <!--DEPARTMENT NAME-->
+			<H1><?php echo QUIZ_SYSTEM_NAME; ?></H1>
+			</DIV>
+			<DIV class="gutter-left gutter-right">
+				<DIV id="breadcrumb">
+                <!--UPDATE BREADCRUMB-->
+
+				</DIV><!--/breadcrumb-->
+				
+				
+				
+				
+                <!--BEGIN CONTENT AREA, COLUMN 2-->
+				<DIV id="column-2">
+<?php
+				if( isset($this->msg) ) {
+					echo "<div class='warning'>" . $this->msg . "</div>\n";
+				}
+?>
+					<h1><?php echo $this->title; ?></h1>
+<?php
+				echo $this->layout()->content;
+?>
+					<div style='height:30px'></div>
+                </DIV><!--/column-2-->
+
+			</DIV><!--/gutters-->
+		</DIV><!--/content-area-->
+	<DIV class="break"></DIV>
+	</DIV><!--/content-->
+</DIV><!--/wrapper-->
+
+<DIV id="wrapper_bottom">
+
+ <DIV id="content_bottom">
+
+  <DIV class="break"></DIV>
+
+  <DIV id="copyright">			
+
+   <P class="left"></P>
+
+   <P class="left text-right">Randomised Programming Quiz Tester</P>
+
+			<DIV class="break"></DIV>
+
+		</DIV><!--/copyright-->
+
+	</DIV><!--/content_bottom-->
+
+</DIV><!--/wrapper_bottom-->
+
+
+<!-- InstanceEnd -->
+</BODY></HTML>

@@ -1,0 +1,34 @@
+<p>Below are the people who have completed the quizzes with the best marks and the best times.</p>
+<?php
+	
+if( sizeof($this->quiz_rows) > 0 ) {
+	
+	foreach( $this->quiz_rows as $qr ) {
+		echo "<h3>" . $qr['name'] . "</h3>\n";
+		
+		if( array_key_exists("scores", $qr) && sizeof($qr['scores']) > 0 ) {
+			
+			echo "<table>\n";
+			echo "<tr><th>Who</th><th>Score</th><th>Time in Seconds</th></tr>\n";
+			foreach( $qr['scores'] as $score ) {
+				echo "<tr>";
+				echo "<td>" . $score['name'] . "</td>";
+				echo "<td>" . $score['score'] . "</td>";
+				echo "<td>" . $score['time'] . "</td>";
+				echo "</tr>\n";
+			}
+			
+			echo "</table>\n";
+		}else{
+			echo "<p>Nobody has passed this quiz yet</p>\n";
+		}
+		
+	}
+
+}else{
+	echo "<p>There are no quizzes available</p>\n";
+}
+	
+
+
+?>

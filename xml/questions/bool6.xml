@@ -1,0 +1,27 @@
+<question type="output">
+	<estimated_time>30</estimated_time>
+	<concepts>
+		<concept>Boolean Operators</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	bool `s1` = `s2`;
+	cout &lt;&lt; (`s4``s1`=`s3`) &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">randset(array("sheep","ox","emu","mquni"))</substitution>
+		<substitution val="s2">randset(array("true","false"))</substitution>
+		<substitution val="s3">if("%s2%"=="true"){return "false";}else{ return "true"; }</substitution>
+		<substitution val="s4">randset(array("","!!"))</substitution>
+	</substitutions>
+</question>

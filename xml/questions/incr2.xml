@@ -1,0 +1,26 @@
+<question type="output">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Incrementation</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	int `s0` = `s1`;
+	cout &lt;&lt; `s2``s0` &lt;&lt; " " &lt;&lt; `s0` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s0">randset(array("nb","mb"))</substitution>
+		<substitution val="s1">rand(2,22)</substitution>
+		<substitution val="s2">randset(array("++","--"))</substitution>
+	</substitutions>
+</question>

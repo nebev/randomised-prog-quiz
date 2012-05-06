@@ -1,0 +1,13 @@
+#logintable{
+	width:300px;
+	
+}
+
+.warning{
+	padding:10px;
+	border:1px solid #E3C37D;
+	text-align:center;
+	background-color:#FFF3D9;
+	color:#382908;
+	margin-bottom:25px;
+}

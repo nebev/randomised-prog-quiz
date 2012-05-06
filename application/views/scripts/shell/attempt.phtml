@@ -1,0 +1,239 @@
+<?php
+	// For compatibility and migration to Zend
+	$vQuiz = $this->quiz;
+	$mQuestionAttempt = $this->question_attempt;
+	$mFinished = $this->finished;
+	$mMarking = $this->marking;
+	$mQuizAttempt = $this->mQuizAttempt;
+	$vTotalQuestions = $this->vTotalQuestions;
+?>
+
+<form action="" method="POST">
+	<h2>Quiz: <?php echo $vQuiz->getQuiz_name(); ?></h2>
+	<input type="hidden" name="quiz" value="<?php echo $vQuiz->getID(); ?>" />
+
+<?php
+
+	//Look at the quiz type - that determines what sort of display we have
+	if(isset($mQuestionAttempt) && $mQuestionAttempt!=null)
+		$vType = strtolower($mQuestionAttempt->getQuestion_base()->getType());
+
+
+	/***************************************************************** MARKING ******************************************************************/
+	/* See if we're marking the question or not */
+
+	if($mMarking){
+		echo "<h3>Results</h3>\n";
+		$vCorrect = false;
+	
+		if($vType=="output"){
+			//Mark the textinput called ans
+			echo "<p>Your output:</p>\n";
+			echo "<pre>".$_POST['ans']."</pre>\n";
+
+			//echo "<p>STRCMP: " . strcmp($_POST['ans'],$mQuestionAttempt->getGeneratedQuestion()->getCorrect_answer()) . "</p>";
+		
+			if(strcmp($_POST['ans'],$mQuestionAttempt->getGeneratedQuestion()->getCorrect_answer())==0)
+				$vCorrect = true;
+			else{
+				//Look at removing all the spaces and newlines
+				$s1 = str_replace("\n", "", $_POST['ans']);
+				$s1 = str_replace(" ", "", $s1);
+				$s1 = str_replace("\r", "", $s1);
+			
+				$s2 = str_replace("\n", "", $mQuestionAttempt->getGeneratedQuestion()->getCorrect_answer());
+				$s2 = str_replace(" ", "", $s2);
+				$s2 = str_replace("\r", "", $s2);
+			
+				/*
+				echo "<p>STRCMP(2): " . strcmp($s1,$s2) . "</p>";
+				echo "<p>".$s1."</p>\n";
+				echo "<p>".$s2."</p>\n";
+				*/
+			
+				if(strcmp($s1,$s2)==0){
+					$vCorrect=true;
+				}
+			}	
+		}elseif($vType=="multiple"){
+			if($_POST['altans']!="1" && $_POST['altans']!="2" && $_POST['altans']!="3" && $_POST['altans']!="4"){
+				die("Invalid Choice Passed.");
+			}
+		
+			echo "<p>Your choice: " . $_SESSION['mc_data'][$_POST['altans']] . "</p>\n"; 
+			//Is it right?
+			if($_SESSION['mc_data'][$_POST['altans']] == $mQuestionAttempt->getGeneratedQuestion()->getCorrect_answer() ){
+				$vCorrect=true;
+			}
+			else{
+				//Is there a hint we can offer this person?
+				$vAltAns = $mQuestionAttempt->getGeneratedQuestion()->getFullAltAnswers();
+				foreach($vAltAns as $vAA){
+					if($vAA[0]== $_SESSION['mc_data'][$_POST['altans']]){
+						//Found our match. Words of wisdom?
+						if(strlen($vAA[1])>1){
+							echo "<p><strong>Hint: </strong>".$vAA[1]."</p>\n";
+						}
+						break;
+					}
+				}
+			
+			}
+		}elseif($vType=="fill-in"){
+		
+			//Start by taking the problem, removing the textareas and substituting our submitted solution
+			$vMyAns = $mQuestionAttempt->getGeneratedQuestion()->getQuestion_data();
+			foreach($_POST as $vKey=>$vPostVar){
+				if(substr($vKey,0,4)=="sub_"){
+					//replace it
+					$vMyAns = preg_replace("/`textarea.+".$vKey.".+textarea`/", stripslashes($vPostVar), $vMyAns);
+				}
+			}
+		
+			//Now we have the student's complete problem... we have to compile it and get the result
+			$vStudentResult = Model_Shell_Compiler::compileAndReturn($mQuestionAttempt->getID() . "_" . rand(1,999),$vMyAns);
+		
+			echo "<p>Your Result:</p>";
+			echo "<pre>" . $vStudentResult . "</pre>";
+
+			echo "<p>Expected Result:</p>";
+			echo "<pre>".$mQuestionAttempt->getGeneratedQuestion()->getCorrect_answer()."</pre>\n<hr/>\n";
+		
+			if(strcmp($vStudentResult,$mQuestionAttempt->getGeneratedQuestion()->getCorrect_answer())==0){
+				$vCorrect=true;
+			}
+		
+		}
+	
+	
+	
+		//Generic marking bit
+		if($vCorrect){
+		
+			//Was this our first attempt or second attempt?
+			if($mQuestionAttempt->getInitial_result()==null){
+				$mQuestionAttempt->setInitial_result("1");
+			}else{
+				$mQuestionAttempt->setSecondary_result("1");			
+			}
+		
+			//Mark it as finished
+			$mQuestionAttempt->setTime_finished(strtotime("now"));
+		
+			//Tell the user that it was correct
+			echo "<p>Well done! That was the correct answer!<br/>Time taken in seconds: ".(strtotime("now") - $mQuestionAttempt->getTime_started())."</p>\n";
+		
+		}else{
+		
+			//First or last attempt?
+			if($mQuestionAttempt->getInitial_result()==null){
+				$mQuestionAttempt->setInitial_result("0");
+				echo "<p>That answer was incorrect. You will get a second attempt</p>\n";
+						
+			}else{
+				$mQuestionAttempt->setSecondary_result("0");			
+			
+				//Close the attempt
+				$mQuestionAttempt->setTime_finished(strtotime("now"));
+			
+				echo "<p>That answer was also incorrect. You will now be given a new question</p>\n";
+				//Show them the correct answer if it's not a fill-in
+				if($vType!="fill-in"){
+					echo "<p>The correct answer was: </p>\n";
+					echo "<pre>".$mQuestionAttempt->getGeneratedQuestion()->getCorrect_answer()."</pre>\n";
+				}else{
+					//Fill-in answer code could go here
+				}
+			}	
+		}
+	
+		//Continue Button
+		echo "<p><input type='submit' value='Continue' /></p>\n";
+		
+	}elseif($mFinished){
+		/***************************************************************** QUIZ IS FINISHED ******************************************************************/
+		echo "<h3>Quiz Results</h3>\n";
+		echo "<p>Congratulations. You finished the quiz!</p>\n";
+		$vTotalScore = $mQuizAttempt->getTotal_score();
+		echo "<p>Your score was " . $vTotalScore . " / " . $vTotalQuestions . "</p>\n";
+		if(($vTotalScore/$vTotalQuestions)*100 < $vQuiz->getPercentage_pass()){
+			echo "<p>Unfortunately you didn't meet the " . $vQuiz->getPercentage_pass() . "% needed to pass this quiz. You have failed this attempt. However, you <em>may</em> be able to take another - check the main screen.</p>\n";
+		}else{
+			echo "<p>You <em>passed</em> this quiz.</p>\n";
+		}
+	
+		echo "<button onClick='javascript:window.close();'>OK</button>\n";
+	
+	
+	}else{
+	
+		/***************************************************************** QUESTION DISPLAY ******************************************************************/
+	
+		echo "<p><strong>Instructions</strong>: " . $mQuestionAttempt->getGeneratedQuestion()->getInstructions() . "</p>\n";
+		echo '<input type="hidden" name="marking" value="1" />';
+	
+		
+		if($vType=="output"){
+		
+			/*OUTPUT type question.
+				Problem is an image, Solution is a single textbox
+			*/
+			echo "<p><img src='". $this->url( array("controller" => "shell", "action" => "imagegen" ) ) ."/?gid=". $mQuestionAttempt->getGeneratedQuestion()->getID() ."' /></p>\n";
+		
+			echo "<p><strong>Write the program output here</strong></p>";
+			echo "<textarea name='ans' rows='10' cols='50'></textarea>\n";
+			echo "<p><input type='submit' value='Submit Answer' /></p>\n";
+		
+		}elseif($vType=="multiple"){
+		
+			echo "<p><img src='". $this->url( array("controller" => "shell", "action" => "imagegen" ) ) ."/?gid=". $mQuestionAttempt->getGeneratedQuestion()->getID() ."' /></p>\n";
+			echo "<p>Select the correct answer below</p>\n";
+		
+			//Put the alternate answers and real answer into an array.
+			$vPossibleAnswers = $mQuestionAttempt->getGeneratedQuestion()->getBareAltAnswers();
+			$vPossibleAnswers[] = $mQuestionAttempt->getGeneratedQuestion()->getCorrect_answer();
+		
+			shuffle($vPossibleAnswers);
+		
+			//Store this data in the session. Don't mark it as correct or anything, just associate numbers with answers
+			$_SESSION['mc_data'] = array();
+			$vCounter = 1;
+			foreach($vPossibleAnswers as $vPA){
+				$_SESSION['mc_data'][$vCounter] = $vPA;
+				echo "<div class='mc'><input type='radio' name='altans' value='$vCounter'> " . $vPA . "</div>\n";
+				$vCounter++;
+			}
+		
+			echo "<p style='margin-top:20px'><input type='submit' value='Submit Answer' /></p>\n";	
+		
+		}elseif($vType=="fill-in"){
+			echo "<hr/>\n";
+			echo "<pre>\n";
+			$vQuestionData = str_replace("<", "&lt;", $mQuestionAttempt->getGeneratedQuestion()->getQuestion_data());
+			$vQuestionData = str_replace(">", "&gt;", $vQuestionData);
+			//Make sure all the textareas come up nicely
+		
+			$vQuestionData = str_replace("`textarea", "</pre><textarea", $vQuestionData);
+			$vQuestionData = str_replace("`/textarea`", "</textarea><pre>", $vQuestionData);
+			$vQuestionData = str_replace("`</textarea>", "></textarea>", $vQuestionData);
+		
+		
+			echo $vQuestionData;
+			echo "</pre>\n";
+		
+			echo "<p>Sometimes it's easier to copy and paste these sorts of problems into a C++ IDE and compile and test them there.<br/>\n";
+			echo "When you've filled in the missing parts of the code, the quiz system will compile your answer and check it</p>";
+		
+			echo "<input type='submit' value='Submit answer' />";
+		}
+
+	}//End-else-for-marking
+
+
+
+
+
+
+	?>
+					</form>
+	

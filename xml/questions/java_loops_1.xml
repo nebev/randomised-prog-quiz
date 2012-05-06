@@ -1,0 +1,68 @@
+<question type="output">
+	<estimated_time>300</estimated_time>
+	<concepts>
+		<concept>Single Level Loops</concept>
+	</concepts>
+	<difficulty>3</difficulty>
+	<instructions>
+		What is the value of %s10% at the end of the following code?
+	</instructions>
+	<problem>
+	class ExampleProgram {												//HIDE
+		public static void main(String[] args){							//HIDE
+			
+int `s10` = `s2`;
+for(int i=`s3`; i `s4` `s5`; i`s6`=`s7`)
+	`s10` = `s10` `s8` `s9`;
+
+			System.out.println(`s10`);									//HIDE
+
+		}																//HIDE
+	}																	//HIDE
+	</problem>
+	
+	<substitutions>
+		<substitution val="s2">rand(0,10)</substitution>
+		<substitution val="s3">rand(1,10)</substitution>
+		<substitution val="s4">randset( array("&lt;","&gt;","&lt;=","&gt;=") )</substitution>
+		<substitution val="s6">
+	
+			if("%s4%"=="&lt;" || "%s4%"=="&lt;=") {
+				if(rand(0,100)&gt;=90)
+					return "+";
+				else
+					return "*";
+			}
+			else {
+				if(rand(0,100)&gt;=90)
+					return "-";
+				else
+					return "/";
+			}
+		</substitution>
+		<substitution val="s5">
+			if("%s6%"=="/")
+				return rand(0,intval("%s3%"));
+			elseif("%s4%"=="&lt;" || "%s4%"=="&lt;=")
+				return rand(intval("%s3%"),intval("%s3%")+rand(0,100));
+			else
+				return rand(intval("%s3%")-rand(0,100),intval("%s3%"));
+		</substitution>
+
+		<substitution val="s7">
+			if("%s6%"=="*")
+				return rand(2,4);
+			elseif("%s6%"=="/")
+				return rand(2,abs(intval("%s3%")-intval("%s5%")));
+			else
+				return rand(1,abs(intval("%s3%")-intval("%s5%")));
+		</substitution>		
+		
+		<substitution val="s8">randset(array("+","-"))</substitution>
+		
+		<substitution val="s9">rand(1,7)</substitution>
+		
+		<substitution val="s10">randset( array("result", "val", "a", "x") )</substitution>
+		
+	</substitutions>
+</question>

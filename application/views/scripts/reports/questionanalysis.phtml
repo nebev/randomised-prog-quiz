@@ -1,0 +1,84 @@
+<h1>Question-Base Analysis</h1>
+<form action="" method="post">
+	<select name="file">
+<?php
+
+	foreach( $this->all_question_bases as $qb ) {
+		if( !is_null($this->question_base) && $this->question_base->getID() == $qb->getID() ) {
+			echo "<option selected='selected' value='". $qb->getID() ."'>" . $qb->getXml() . "</option>\n";
+		}else{
+			echo "<option value='". $qb->getID() ."'>" . $qb->getXml() . "</option>\n";
+		}
+	}
+?>
+	</select>
+	<input type="submit" value="Change" />
+</form>
+
+<?php
+	$mQB = $this->question_base;
+
+	echo "<h3 style='margin-top:30px'>General Information</h3>\n";
+	echo "<table class='smallTable'>\n";
+	echo "<tr><th>XML FileName</th><td>".$mQB->getXml()."</td>\n";
+	echo "<tr><th>Question Type</th><td>".$mQB->getType()."</td>\n";
+	echo "<tr><th>Difficulty Level</th><td>".$mQB->getDifficulty()."</td>\n";
+	echo "<tr><th>Estimated Time to complete (in Seconds)</th><td>".$mQB->getEstimated_time()."</td>\n";
+	echo "</table>\n";
+
+
+	echo "<h3>Sample Question Generation</h3>\n";
+	
+	echo "<br/>\n<pre>" . View_Helper_Question::format_for_text($this->sample_question->getProblem()) . "</pre>\n";
+	echo "Actual Output: <pre>" . $this->sample_question->getCorrectOutput() . "</pre>";
+	if($this->sample_question->getFriendlyType()=="multiple"){
+		echo "Alternate answers: ";
+		foreach($this->sample_question->getAnswers() as $vAnswer){
+
+			if(is_array($vAnswer)){
+				echo "<pre>" . $vAnswer[0] . "</pre><p>Why it's wrong: " . $vAnswer[1] . "</p>\n<hr/>\n";
+			}else
+				echo "<pre>" . $vAnswer . "</pre>\n<hr/>\n";
+		}
+	}elseif($this->sample_question->getFriendlyType()=="fill-in"){
+		echo "Your complete solution specified: <pre>".$this->sample_question->getDebugProblem()."</pre>\n";
+	}
+
+
+
+
+
+
+	echo "<h3>Analysis of time</h3>\n";
+	if( sizeof($this->attempts) < 1 ) {
+		echo "<p>No Attempts on this question</p>\n";
+	}else{
+		
+		echo "<table class='smallTable'>\n";
+		
+		$vTimes=array();
+		foreach($this->attempts as $vAttempt){
+			$vTimes[] = $vAttempt->getTime_finished() - $vAttempt->getTime_started();
+		}
+		
+		sort($vTimes);
+		if(sizeof($vTimes)%2==0){
+			$median = sizeof($vTimes)/2;
+			$median = ($vTimes[$median]+$vTimes[$median-1])/2;
+		}else{
+			$median=floor(sizeof($vTimes)/2);
+			$median=$vTimes[$median];
+		}
+		
+		
+		echo "<tr><th>Average Time Taken(seconds)</th><td>".round(array_sum($vTimes)/sizeof($vTimes))."</td></tr>\n";
+		echo "<tr><th>Total Attempts at Question</th><td>".sizeof($vTimes)."</td></tr>\n";
+		echo "<tr><th>Shortest Time(seconds)</th><td>".$vTimes[0]."</td></tr>\n";
+		echo "<tr><th>Longest Time(seconds)</th><td>".$vTimes[sizeof($vTimes)-1]."</td></tr>\n";
+		echo "<tr><th>Median Time</th><td>".$median."</td></tr>\n";
+		echo "</table>\n";
+		
+		
+	}
+
+?>

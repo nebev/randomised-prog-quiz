@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<menus>
+    <block id="student" name="Quiz System">
+        <item>
+            <name>Available Quizzes</name>
+            <url>index/available</url>
+        </item>
+        <item>
+            <name>Outstanding Quizzes</name>
+            <url>index/available?outstanding=yes</url>
+        </item>
+        <item>
+            <name>Hall of Fame</name>
+            <url>index/halloffame</url>
+        </item>
+        <item>
+            <name>Logout</name>
+            <url>auth/logout</url>
+        </item>
+		
+   </block>
+    
+    
+    <block id="admin" name="Administrator Menu">
+        
+        <item>
+            <name>Manage Quizzes</name>
+            <url>admin/manage</url>
+            <permission>admin</permission>
+        </item>
+        <item>
+            <name>Quiz Results</name>
+            <url>admin/resultsoverview</url>
+            <permission>admin</permission>
+        </item>
+        <item>
+            <name>Rebuild XML</name>
+            <url>admin/rebuildxml</url>
+            <permission>admin</permission>
+        </item>
+        <item>
+            <name>Sync Usernames</name>
+            <url>admin/syncusernames</url>
+            <permission>admin</permission>
+        </item>
+        <item>
+            <name>Reports</name>
+            <url>reports/list</url>
+            <permission>admin</permission>
+        </item>
+        <item>
+            <name>Test Question Generation</name>
+            <url>index/testquestiongeneration</url>
+            <permission>admin</permission>
+        </item>
+      
+    </block>
+   
+    
+</menus>

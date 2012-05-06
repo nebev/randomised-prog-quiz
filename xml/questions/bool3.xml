@@ -1,0 +1,27 @@
+<question type="output">
+	<estimated_time>30</estimated_time>
+	<concepts>
+		<concept>Boolean Statements</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	string `s1` = "`s2`";
+	cout &lt;&lt; (`s1` `s4` "`s3`") &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">randset(array("s","p","e","w"))</substitution>
+		<substitution val="s2">randset(array("Hello","Goodbye","Virtual","Cranberry","QuizMe"))</substitution>
+		<substitution val="s3">substr(%s2%,0,1)</substitution>
+		<substitution val="s4">randset(array("==","&lt;","&gt;"))</substitution>
+	</substitutions>
+</question>

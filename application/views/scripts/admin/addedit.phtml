@@ -1,0 +1,18 @@
+<?php
+
+$vEdit = false;
+if( isset($this->editing) ) {
+	$vQuiz = $this->editing;
+	$vEdit = true;
+}
+
+
+echo "<h2>";
+
+if($vEdit){ echo "Edit";}else{ echo "Add"; }
+echo " Quiz</h2>\n";
+
+echo $this->form;
+
+?>
+

@@ -1,0 +1,25 @@
+<question type="output">
+	<estimated_time>80</estimated_time>
+	<concepts>
+		<concept>Arithmetic Operators</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	cout &lt;&lt; `s1` / `s2` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s2">rand(1,10)</substitution>
+		<substitution val="s1">rand(2,5)*%s2%</substitution>
+
+	</substitutions>
+</question>

@@ -1,0 +1,27 @@
+<question type="output">
+	<estimated_time>150</estimated_time>
+	<concepts>
+		<concept>Arithmetic Operators</concept>
+	</concepts>
+	<difficulty>3</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	int `s4` = `s1`;
+	cout &lt;&lt; `s2``s3``s4` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s2">rand(2,18)</substitution>
+		<substitution val="s1">rand(3,12)</substitution>
+		<substitution val="s3">randset(array("%","/"))</substitution>
+		<substitution val="s4">randset(array("x","y","z"))</substitution>
+	</substitutions>
+</question>

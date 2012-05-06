@@ -1,0 +1,57 @@
+<question type="output">
+	<estimated_time>200</estimated_time>
+	<concepts>
+		<concept>Precedence Rules</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	int `s0` = `s1`, `s2` = `s3`, `s4` = `s5`;
+	cout &lt;&lt; `s6``s0``s9``s7``s2``s8``s10``s4``s11` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s0">randset(array("a","c"))</substitution>
+		<substitution val="s2">randset(array("b","d"))</substitution>
+		<substitution val="s4">randset(array("e","g"))</substitution>
+		<substitution val="s1">rand(3,5)</substitution>
+		<substitution val="s3">rand(2,3)</substitution>
+		<substitution val="s5">rand(-5,-2)</substitution>
+		<!--Brackets-->
+		<substitution val="s6">
+			if(rand(1,3)=="1"){
+				return "(";
+			}
+		</substitution>
+		<substitution val="s7">
+			//Second possible 'first bracket'
+			if("%s6%"!="(" &amp;&amp; rand(1,3)=="1"){
+				return "(";
+			}
+		</substitution>
+		<substitution val="s8">
+			if("%s6%"=="("){
+				return ")";
+			}
+		</substitution>
+		<substitution val="s11">
+			if("%s7%"=="("){
+				return ")";
+			}
+		</substitution>
+		
+		<!--Operations-->
+		<substitution val="s9">randset(array("+","*","-"))</substitution>
+		<substitution val="s10">randset(array("*","/"))</substitution>
+		
+		
+	</substitutions>
+</question>

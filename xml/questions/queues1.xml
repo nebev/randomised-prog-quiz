@@ -1,0 +1,58 @@
+<question type="output">
+	<estimated_time>100</estimated_time>
+	<concepts>
+		<concept>Queues</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program? (Including Commas)
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+int main()
+{
+	queue&lt;string&gt; queueObject;
+
+	queueObject.push( "`s1`" );
+	queueObject.push( "`s2`" );
+	queueObject.push( "`s3`" );
+	`s4`
+	`s5`
+	`s6`
+	`s7`
+
+	while ( !queueObject.empty() ) {
+		cout &lt;&lt; queueObject.front() &lt;&lt; ",";
+		queueObject.pop();
+	}
+
+	return 0;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">randset(array("Deranged","Puppy","Smells","Insensitive","Ornament"))</substitution>
+		<substitution val="s2">randset(array("Vampire","Bill","Drains","Sookie","Clean"))</substitution>
+		<substitution val="s3">randset(array("Harry","Potter","Trains","Silvery","Colleagues"))</substitution>
+		<substitution val="s4">
+			if(rand(0,1)){return "queueObject.push( \"".randset(array("Enlightened","Turtles","Attack","Red","Plumber"))."\" );";}	
+		</substitution>
+		<substitution val="s5">
+			if(rand(0,1)){return "queueObject.push( \"".randset(array("Daft","Rats","Fight","Massive","Birds"))."\" );";}	
+		</substitution>
+		<substitution val="s6">
+			if(rand(0,1)){return "queueObject.push( \"".randset(array("Elephants","Rule","Magic","Kingdoms","Tomorrow"))."\" );";}	
+		</substitution>
+		<substitution val="s7">
+			if(rand(0,1)){return "queueObject.push( \"".randset(array("Laptops","Showing","Apples","Perform","Reasonably"))."\" );";}	
+		</substitution>
+		
+	</substitutions>
+	
+	
+	
+</question>

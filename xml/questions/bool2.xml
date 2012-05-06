@@ -1,0 +1,25 @@
+<question type="output">
+	<estimated_time>30</estimated_time>
+	<concepts>
+		<concept>Boolean Statements</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	int `s1` = `s2`;
+	cout &lt;&lt; `s1` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">randset(array("a","b","x","q"))</substitution>
+		<substitution val="s2">randset(array("true","false"))</substitution>
+	</substitutions>
+</question>

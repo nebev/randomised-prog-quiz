@@ -1,0 +1,65 @@
+<form action="" method="GET">
+	<select name="q">	
+<?php
+		foreach( $this->available_selects as $ae ) {
+			echo $ae;
+		}
+?>
+	</select>
+	<input type="submit" value="Change" />
+<?php
+
+	if( isset($this->question) ) {
+		
+		$mQuestion = $this->question;
+		
+		echo "Question Type: " . $mQuestion->getFriendlyType() . "<br/>\n";
+		echo "Question Concepts: ";
+			foreach($mQuestion->getConcepts() as $vConcept){
+				echo $vConcept . " ";
+			}
+
+		echo "<br/>\nDifficulty: " . $mQuestion->getDifficulty();
+		echo "<br/>\nInstructions: " . $mQuestion->getInstructions();
+		
+		$problem = $mQuestion->getProblem();
+		$exploded_problem = explode("\n", $problem);
+		$new_problem = array();
+		foreach( $exploded_problem as $ep ) {
+			if( strpos($ep, "//HIDE") === false ) {
+				$new_problem[] = $ep;
+			}
+		}
+		$problem = implode("\n", $new_problem);
+		
+		
+		echo "<br/>\n<pre>" . str_replace("<","&lt;",str_replace(">","&gt;", $problem )) . "</pre>\n";
+
+
+		echo "Actual Output: <pre>" . $mQuestion->getCorrectOutput() . "</pre>";
+
+
+		if($mQuestion->getFriendlyType()=="multiple"){
+			echo "Alternate answers: ";
+			foreach($mQuestion->getAnswers() as $vAnswer){
+
+				if(is_array($vAnswer)){
+					echo "<pre>" . $vAnswer[0] . "</pre><p><strong>Why it's wrong:</strong> " . $vAnswer[1] . "</p>\n<hr/>\n";
+				}else
+					echo "<pre>" . $vAnswer . "</pre>\n<hr/>\n";
+			}
+		}elseif($mQuestion->getFriendlyType()=="fill-in"){
+			echo "Your complete solution specified: <pre>".$mQuestion->getDebugProblem()."</pre>\n";
+		}
+		
+		
+		
+	}else{
+		echo "<p>Please Select an XML from Above</p>\n";
+	}
+
+
+?>
+	
+	
+</form>

@@ -1,0 +1,50 @@
+<question type="output">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Constructors</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		Give the output of the following program
+	</instructions>
+	<problem>
+		#include &lt;iostream&gt;
+		using namespace std;
+		
+		class myclass {
+		public:
+		  myclass();
+		  myclass(const myclass &amp;o);
+		  myclass f();
+		};
+
+		myclass::myclass()
+		{
+		  cout &lt;&lt; "Constructing normally. ";
+		}
+
+		myclass::myclass(const myclass &amp;o)
+		{
+		  cout &lt;&lt; "Constructing copy. ";
+		}
+
+		myclass myclass::f()
+		{
+		  myclass temp;
+
+		  return temp;
+		}
+
+		int main()
+		{
+		  myclass obj;
+
+		  obj = obj.f();
+
+		  return 0;
+		}
+	</problem>
+
+	
+	
+</question>

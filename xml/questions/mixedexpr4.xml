@@ -1,0 +1,55 @@
+<question type="multiple">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Mixed Expressions - MC</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program? (5 decimal places)
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	`s5` `s0` = `s1``s4`;
+
+	cout &lt;&lt; `s0``s2``s3` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s5">return "float";</substitution>
+		<substitution val="s0">randset(array("t","u"))</substitution>
+		<substitution val="s1">rand(11,17)</substitution>
+		<substitution val="s3">randset(array("2","4"))</substitution>
+		<substitution val="s2">randset(array("-","/"))</substitution>
+		<substitution val="s4">
+			if("%s2%"!="/"){
+				return "." . rand(1,9);
+			}
+		</substitution>
+	</substitutions>
+	
+	<answers>
+		<answer>
+			<substitute val="ans">return %ans% + rand(1,10);</substitute>
+			<description>This answer has not performed the basic operations correctly. Review the order of operations</description>
+		</answer>
+		<answer>
+			<substitute val="s5">return "int";</substitute>
+			<description>It is important that you know the difference between a float and an integer. This is the answer you would have got if you misread the first variable declaration as an integer instead of a float.</description>
+		</answer>
+		<answer>
+			<substitute val="ans">rand(25,45)</substitute>
+			<description>Revise your understanding of Variables.</description>
+		</answer>
+		<answer>
+			<substitute val="ans">%ans% - rand (1,15)</substitute>
+			<description>Make sure you understand the various different operators. / + - * and % all have very different meanings.</description>
+		</answer>
+	</answers>
+	
+	
+</question>

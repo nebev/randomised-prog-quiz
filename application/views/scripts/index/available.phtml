@@ -1,0 +1,95 @@
+<p>If you believe you should have more quizzes accessible to you, please contact your unit convener.</p>
+<?php 
+	$vAvailable = $this->available;
+
+	/*	Any Quizzes available? */
+	if(sizeof($vAvailable)==0){
+		echo "<p>There are no quizzes available at this time</p>";
+	}else{
+		echo "<table>\n";
+		echo "<tr><th>Quiz Title</th><th>To be completed by</th><th>Status</th><th>Best Mark</th><th>Actions</th></tr>\n";
+	
+		foreach($vAvailable as $vQuiz){
+			echo "\t<tr>\n";
+		
+			echo "\t\t<td>".$vQuiz->getQuiz_name()."</td>\n";
+			echo "\t\t<td>".date("d/m/Y",$vQuiz->getClose_date())."</td>\n";
+
+			/*	So find out what status the quiz is in - Completed(1), Not completed(2) or In progress(3) (Optionally Late) */
+			
+			$vQuizAttempt = Model_Quiz_QuizAttempt::fromQuizAndUser($vQuiz, $this->username);
+
+			if($vQuizAttempt != null){
+			
+				/*	So we might have started or finished the quiz */
+				if($vQuizAttempt->getDate_finished()==null){
+					$vQuizStatus = 3;
+					if($vQuiz->getClose_date() < strtotime("now")){
+						echo "\t\t<td>In Progress (Late)</td>\n";
+					}
+					else{	
+						echo "\t\t<td>In Progress</td>\n";
+					}
+				
+				}else{
+					$vQuizStatus = 1;
+					echo "\t\t<td>Completed</td>\n";
+				}
+			}else{
+				//No existing quiz attempt
+				$vQuizStatus = 2;
+				if($vQuiz->getClose_date() < strtotime("now"))
+					echo "\t\t<td>Not Completed (Late)</td>\n";
+				else	
+					echo "\t\t<td>Not Completed</td>\n";
+			}
+		
+		
+		
+			/*	Marks (If completed) */
+			if($vQuizStatus==1){
+				$vHighest = Model_Quiz_QuizAttempt::getHighestMarkQuiz($this->username, $vQuiz);
+				echo "\t\t<td>".$vHighest->getTotal_score();
+				//Did they pass/fail?
+				if(($vHighest->getTotal_score()/$vQuiz->getTotalQuestions())*100 >= $vQuiz->getPercentage_pass()){
+					echo " (<span class='green'>PASS</span>)";
+				}else{
+					echo " (<span class='red'>FAIL</span>)";
+				}
+				echo "</td>\n";
+			}else{
+				echo "\t\t<td>N/A</td>\n";
+			}
+				
+		
+
+			/*	Possible Actions */
+			
+			if($vQuizStatus == Model_Quiz_Quiz::QUIZ_AVAILABLE){
+				echo "\t\t<td><a href='". $this->baseUrl() ."/shell/attempt?quiz=".$vQuiz->getID()."' target='blank'>Start Quiz</a></td>\n";
+			}elseif($vQuizStatus==3){
+				echo "\t\t<td><a href='". $this->baseUrl() ."/shell/attempt?quiz=".$vQuiz->getID()."' target='blank'>Continue Quiz</a></td>\n";
+			}else{
+				
+				//Completed. Can we re-attempt?
+				$vAttempts = Model_Quiz_QuizAttempt::getAllFromUser($this->username, $vQuiz);
+				if(sizeof($vAttempts)>=$vQuiz->getMax_attempts()){
+					echo "\t\t<td>N/A</td>\n";
+				}else{
+					//Providing it's not overdue
+					if($vQuiz->getClose_date() < strtotime("now"))
+						echo "<td>Quiz Closed</td>";
+					else
+						echo "\t\t<td><a href='". $this->baseUrl() ."/shell/attempt?quiz=".$vQuiz->getID()."' target='blank'>Attempt Again</a></td>\n";
+				}			
+			}
+		
+			echo "\t</tr>\n";
+		}
+		echo "</table>\n";
+	}
+	
+
+
+
+?>

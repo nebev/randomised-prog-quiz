@@ -1,0 +1,49 @@
+<question type="output">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Precedence Rules</concept>
+		<concept>Mixed Expressions</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	int `s0` = `s1`;
+	float `s2` = `s3`;
+	int `s4` = `s5`;	
+	cout &lt;&lt; `s0` / `s6``s2``s8``s4``s7` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s0">randset(array("a","b"))</substitution>
+		<substitution val="s1">rand(10,20)</substitution>
+		<substitution val="s2">randset(array("c","d"))</substitution>
+		<substitution val="s3">randset(array("2","4"))</substitution>
+		<substitution val="s4">randset(array("e","f"))</substitution>
+		<substitution val="s5">rand(2,15)</substitution>
+
+		<!--Brackets-->
+		<substitution val="s6">
+			if(rand(0,2)>1){
+				return "(";
+			}
+		</substitution>
+		<substitution val="s7">
+			if("%s6%"=="("){
+				return ")";
+			}
+		</substitution>
+		
+		<!--Operations-->
+		<substitution val="s8">randset(array(" + "," - "))</substitution>
+		
+		
+	</substitutions>
+</question>

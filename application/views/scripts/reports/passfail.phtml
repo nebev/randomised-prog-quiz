@@ -1,0 +1,54 @@
+<h1>Pass / Fail Results</h1>
+<form action="" method="post">
+	<select name="group">
+<?php
+	foreach( $this->all_groups as $group ) {
+		if( $this->group == $group ) {
+			echo "<option selected='selected'>" . $group . "</option>\n";
+		}else{
+			echo "<option>" . $group . "</option>\n";
+		}
+	}
+?>
+	</select>
+	<input type="submit" value="Change" />
+</form>
+
+
+<?php
+if( is_null($this->group) ):
+?>
+	<p>Please Select a Group</p>
+<?php
+else:
+
+	// Sort the members by last name
+	usort($this->members, array("View_Helper_Sort", "sort_by_last_name"));
+
+
+	// Header
+	echo "<div style='height:30px'></div>\n";
+	echo "<table><tr><td></td>";
+	foreach( $this->quizzes as $quiz ) {
+		echo "<th>" . $quiz->getName() . "</th>";
+	}
+	echo "</tr>\n";
+	
+	// Each Row contains a student, then the results they got for each quiz
+	foreach( $this->members as $member ) {
+		echo "<tr>\n";
+		echo "<th>" . $member['last_name'] . " " . $member['first_name'] . "</th>";
+		
+		foreach( $this->quizzes as $quiz ) {
+			echo "<td>" . $this->quiz_results[ $quiz->getID() ][ $member['username'] ] . "</td>\n";
+		}
+		
+		echo "</tr>\n";
+	}
+	
+	
+	echo "</table>\n";
+
+
+endif;
+?>

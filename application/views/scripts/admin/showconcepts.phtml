@@ -1,0 +1,73 @@
+<?php
+	$vQuiz = $this->quiz;
+?>
+
+<h2>Quiz Concepts</h2>
+<h3><?php echo $vQuiz->getQuiz_name(); ?></h3>
+<p>The concepts and difficulties being assessed in this quiz are listed below:</p>
+<table>
+	<tr>
+		<th>Num of Questions</th>
+		<th>Concept</th>
+		<th>Difficulty (from)</th>
+		<th>Difficulty (to)</th>
+		<th>Actions</th>
+	</tr>
+	
+<?php
+
+/*	Display each Quiz Concept in a table */
+	$vTestedConcepts = $vQuiz->getTestedConcepts();
+
+	
+	foreach($vTestedConcepts as $vTestedConcept){
+		echo "\t<tr>\n";
+		echo "\t\t<td>".$vTestedConcept->getNumber_tested()."</td>\n";
+		echo "\t\t<td>".$vTestedConcept->getConcept()->getConcept_name()."</td>\n";
+		echo "\t\t<td>".$vTestedConcept->getLower_difficulty()."</td>\n";
+		echo "\t\t<td>".$vTestedConcept->getHigher_difficulty()."</td>\n";
+		echo "\t\t<td><a href='". $this->url(array("controller" => "admin", "action" => "deleteconcept")) ."?concept_id=".$vTestedConcept->getID() ."' onclick='var ans=confirm(\"Are you sure you want to delete this concept from this quiz?\"); if(!ans){return false;}'><img src='". $this->baseUrl ."/images/delete_small.png' /></a></td>\n";
+		echo "\t</tr>\n";
+	}
+
+?>
+</table>
+
+<!-- The Form for adding a concept to a quiz -->
+<form class="ajaxForm" action="<?php echo $this->url(array("controller" => "admin", "action" => "addconcept")) ?>" method="post">
+	<?php
+		echo "<input type='hidden' name='id' value='".$vQuiz->getID()."' />";
+	?>
+	<p style='margin-top:15px;'><a href="javascript:void(0)" onClick="$('#addForm').show(200);">Add a Tested Concept to this quiz</a></p>
+	<div id="addForm" style="display:none;">
+	<table style="width:300px">
+		<tr>
+			<th>Num of Questions</th>
+			<td><input type='text' name='num' /></td>
+		</tr>
+		<tr>	
+			<th>Concept</th>
+			<td><select name="concept">
+<?php
+
+	foreach($this->concepts as $vConcept){
+		echo "<option>".$vConcept->getConcept_Name()."</option>\n";
+	}
+
+?>
+			</select></td>
+		</tr>
+		<tr>
+			<th>Difficulty (from)</th>
+			<td><input type='text' name='from' /></td>
+		</tr>
+		<tr>
+			<th>Difficulty (to)</th>
+			<td><input type='text' name='to' /></td>
+		</tr>
+	</table>
+	<input type="submit" value="Add" />
+	</div><!-- End AddForm -->
+	
+</form>
+</div>

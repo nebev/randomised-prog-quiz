@@ -1,0 +1,33 @@
+<question type="output">
+	<estimated_time>80</estimated_time>
+	<concepts>
+		<concept>Conditions</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	int `s2` = 0;
+	int `s1` = `s3`;
+	if ( `s1` &gt; `s4` )
+		`s2` = 1;
+	else
+		`s2` = 2;
+		
+	cout &lt;&lt; `s2` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s2">randset(array("f","u","p"))</substitution>
+		<substitution val="s1">randset(array("a","c","t","i","n","g"))</substitution>
+		<substitution val="s3">rand(5,25)</substitution>
+		<substitution val="s4">rand(3,35)</substitution>
+	</substitutions>
+</question>

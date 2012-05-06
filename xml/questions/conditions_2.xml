@@ -1,0 +1,38 @@
+<question type="output">
+	<estimated_time>80</estimated_time>
+	<concepts>
+		<concept>Conditions</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main(){
+	
+	int result = `s1`, b = `s3`, `s4` = `s2`;
+	if( b*2 == `s4` )
+		result = result + 1; //another way is to use "result++;"
+	else
+		result = result - 1;
+		
+	cout &lt;&lt; result &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s2">rand(1,10)*2</substitution>
+		<substitution val="s1">(rand(4,7)*2)</substitution>
+		<substitution val="s3">
+			if(rand(0,1)==1){
+				return %s2%/2;
+			}else{
+				return %s2%-3;
+			}
+		</substitution>
+		<substitution val="s4">randset(array("c","z","s"))</substitution>
+	</substitutions>
+</question>

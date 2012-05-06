@@ -1,0 +1,36 @@
+<question type="fill-in">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Strings_fillin</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		Complete the code so that this program outputs:
+		&lt;pre&gt;%ans%&lt;/pre&gt;
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main()
+{
+	`i1`
+	cout &lt;&lt; "Your name is " &lt;&lt; firstName + " " + lastName;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">randset(array("Brad","Ben","Bovine","Lloyd","Katie","Robyn","Eliza","Lachlan"))</substitution>
+		<substitution val="s2">randset(array("Storch","Smith","Simpson","Cheng","Holmes","Elliot","Bull","O'Brien"))</substitution>
+	</substitutions>
+	
+	<inputboxes>
+		<inputbox val="i1" lines="2">
+	string firstName = "%s1%";
+	string lastName = "%s2%";
+		</inputbox>
+		
+	</inputboxes>
+	
+</question>

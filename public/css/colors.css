@@ -1,0 +1,108 @@
+/* link styles */
+a:link, .article .text a:link {
+    color: #00955f;
+}
+
+#nav-left a:visited {
+    color: #00955f;
+}
+
+a:hover, h2 a:hover, .home #column-3 h3 a:hover, .article .text a:hover {
+	border-color: #00955f;
+	color: #00955f;
+}
+
+a:active, h2 a:active, .home #column-3 h3 a:active, .article .text a:active {
+	border-color: #00955f;
+   	color: #00955f;
+}
+
+a:hover img, a:active img {
+	border-color:#00955f;
+}
+
+.department-image {
+	background: #00955f url(../images/green/bg_department.png) no-repeat;
+}
+
+.bg-right {
+	background-position: right top;
+}
+
+#nav-left li a {
+	background-image: url(../images/green/nav_indicators.png);
+}
+
+#nav-left li a:hover, #nav-left li a:active, #nav-left li a.current {
+	color:#00955f;
+}
+
+#department #row-1 {
+	background: url(../images/green/bg_gradient_2col.png) center bottom no-repeat;
+}
+
+#row-2{
+	background: url(../images/green/bg_gradient_1col.png) left bottom no-repeat;
+}
+
+.gradientbg {
+	background: url(../images/green/bg_gradient_1col.png) left bottom no-repeat;  
+	margin: 0 0 1.2em 0;
+	padding: 0 0 .5em 0;
+}
+
+p.intro {
+	background: url(../images/green/bg_gradient_2col.png) center bottom no-repeat;
+}
+
+.two-column p.intro {
+	background: url(../images/green/bg_gradient_1col.png) center bottom no-repeat;	
+}
+
+h3, h4, h5 {
+	color:#00955f;
+}
+
+#nav-left h2 {
+	background: #00955f url(../images/green/bg_nav-left.png) left top no-repeat;
+}
+
+thead tr th {
+	background-image: url(../images/green/bg_department.png);
+	background-color: #00955f;
+}
+
+th {
+	background-image: url(../images/green/bg_department.png);
+	background-color: #00955f;
+}
+
+.article h3 a:link, .article h3 a:visited, .article h4 a:link, .article h4 a:visited {
+	color: #00955f;
+}
+
+.article h3 a:hover, .article h3 a:active, .article h4 a:hover, .article h4 a:active {
+    border-color: #00955f;
+}
+
+
+/* Quiz specific styles */
+
+.red{
+	color:red;
+	font-weight:bold;
+}
+.green{
+	color:green;
+	font-weight:bold;
+}
+.orange{
+	color:#D15400;
+}
+
+.vertical-table{
+
+}
+.smallTable{
+	width:60%;
+}

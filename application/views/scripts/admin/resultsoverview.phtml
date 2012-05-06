@@ -1,0 +1,24 @@
+<h1>Quiz Results</h1>
+<p>Click on a Quiz to see its results</p>
+
+<table>
+	<tr>
+		<th>Quiz Name</th>
+		<th>Total Number Of Attempts</th>
+		<th>Date Due</th>
+	</tr>
+<?php
+	foreach( $this->quizzes as $quiz ) {
+		$attempts = $quiz->getQuizAttempts();
+		$end_date = $quiz->getClose_date();
+		
+		echo "<tr>\n";
+				
+		echo "<td><a href='". $this->url( array("controller" => "admin", "action" => "resultsquiz", "quiz_id" => $quiz->getID()) ) ."'>" . $quiz->getName() . "</a></td>\n";
+		echo "<td>" . sizeof($attempts) . "</td>\n";
+		echo "<td>" . date(DEFAULT_DATE_FORMAT, $end_date) . "</td>\n";
+		
+		echo "</tr>\n";	
+	}
+?>
+</table>

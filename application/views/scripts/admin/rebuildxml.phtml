@@ -1,0 +1,20 @@
+<h2>XML Import</h2>
+<?php
+if( isset($this->count) ):
+?>
+<p>This section allows you to import the XML files in the <em>Questions</em> directory on the
+server into the database</p>
+
+<p><strong>Warning:</strong> References to existing XML files will not be deleted. If you have removed any XML files from the questions folder, remove them from the Question_Base table in the database.</p>
+<p>Number of Files currently in the <em>Questions</em> directory:
+<?php
+	echo $this->count;
+?> 
+</p>
+<form action="" method="post">
+	<input type="hidden" name="process" value="1" />
+	<input type="submit" value="Process" />
+</form>
+<?php
+endif;
+?>

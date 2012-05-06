@@ -1,0 +1,33 @@
+<question type="output">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Precedence Rules</concept>
+		<concept>Mixed Expressions</concept>
+	</concepts>
+	<difficulty>3</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	int `s0` = `s1`;
+
+	cout &lt;&lt; `s2`/(`s0` `s3` `s4`) &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s0">randset(array("t","u"))</substitution>
+		<substitution val="s1">rand(5,20)</substitution>
+		
+		<substitution val="s2">rand(7,15)</substitution>
+		<substitution val="s3">randset(array("+","-"))</substitution>
+		<substitution val="s4">rand(2,9).".5"</substitution>
+		
+		
+	</substitutions>
+</question>

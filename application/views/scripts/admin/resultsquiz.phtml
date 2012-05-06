@@ -1,0 +1,59 @@
+<h1><?php echo $this->quiz->getName(); ?></h1>
+<p>Showing latest results of this quiz. Remember that quiz results should only be recorded in other marking systems once the quiz has closed.</p>
+<p>Quiz Administrators will not be shown on this list unless they are part of the <em><?php echo $this->quiz->getPermissions_group(); ?></em> group in Active Directory/LDAP.</p>
+
+<?php
+if( sizeof( $this->results ) > 0 ):
+	// Sort the results by last name
+	usort($this->results, array("View_Helper_Sort", "sort_by_last_name"));
+
+?>
+
+<table>
+	<tr>
+		<th>Last Name</th>
+		<th>First Name</th>
+		<th>Account</th>
+		<th>Verdict</th>
+		<th>Best Score (<?php echo $this->quiz->getTotalQuestions(); ?>)</th>
+		<th>Attempts</th>
+	</tr>
+<?php
+
+	foreach( $this->results as $result ) {
+		echo "<tr>\n";
+		echo "<td>" . strtoupper($result['last_name']) . "</td>\n";
+		echo "<td>" . $result['first_name'] . "</td>\n";
+		echo "<td>" . $result['username'] . "</td>\n";
+		
+		// Next 3 columns are dependent on if they have completed an attempt of this quiz or not
+		if( array_key_exists("verdict", $result) && strlen($result['verdict']) > 0 ) {
+			echo "<td>" . $result['verdict'] . "</td>\n";
+			echo "<td>" . $result['best_score'] . "</td>\n";
+			echo "<td>" . $result['attempts'] . "</td>\n";
+		}else{
+			echo "<td><span class='orange'>None Completed</span></td>\n";
+			echo "<td></td>\n";
+			echo "<td></td>\n";
+		}
+		
+		echo "</tr>\n";
+	}
+
+	
+
+?>
+</table>
+<?php
+else:
+?>
+	<p>There doesn't appear to be anyone that is a member of the LDAP group '<em><?php echo $this->quiz->getPermissions_group(); ?></em>'. Check the connection to LDAP or specify another group</p>
+<?php
+endif;
+
+
+
+
+
+
+?>

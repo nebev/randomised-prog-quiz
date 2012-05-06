@@ -1,0 +1,70 @@
+<question type="output">
+	<estimated_time>220</estimated_time>
+	<concepts>
+		<concept>Stacks</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What will the output of the following program produce?
+	</instructions>
+	<problem>
+		#include &lt;iostream&gt;
+		#include &lt;stack&gt;
+		#include &lt;string&gt;
+		using namespace std;
+
+		int main()
+		{
+		  stack&lt;`s8`&gt; stackObject;
+
+		  stackObject.push(`s0``s1``s0`);
+		  stackObject.push(`s0``s2``s0`);
+		  stackObject.push(`s0``s3``s0`);
+		  stackObject.push(`s0``s4``s0`);
+		  `s5`
+		  `s6`
+		  `s7`
+
+		  while(!stackObject.empty()) {
+		    cout &lt;&lt; stackObject.top() &lt;&lt; ",";
+		    stackObject.pop();
+		  }
+
+		  return 0;
+		}
+
+	</problem>
+
+	<substitutions>
+		<substitution val="s8">randset(array("string","char"))</substitution>
+		
+		<substitution val="s0">if("%s8%"=="string"){return "\"";}else{ return "'";}</substitution>
+		<substitution val="s1">randset(array("Mr G","Jonah","Jamae","Celiene"))</substitution>
+		<substitution val="s2">randset(array("Solo","Skywalker","Chewbacca","Hutt"))</substitution>
+		<substitution val="s3">randset(array("Ben","Chris","Lloyd","Emily"))</substitution>
+		<substitution val="s4">randset(array("Mr X","Punjab","Trooper","Destroyer"))</substitution>
+		<substitution val="s5">
+			//Essentially a random line. It might be here, it might not. Since I'm messing with ' and " characters
+			//because I want to see how closely students pay attention to a CHAR stack with strings
+			//I have to use the str_replace function to ensure I don't get any unecessary slashes
+			
+			
+			if(rand(0,1)){
+				return str_replace("\'", "'", "stackObject.push(\%s0%" . randset(array("Toby","Di","Lauren","Gran")) . "\%s0%);");
+			}
+		</substitution>
+		<substitution val="s6">
+			if(rand(0,1)){
+				return str_replace("\'", "'","stackObject.push(\%s0%" . randset(array("Epsilon","Alpha","Beta","Dota")) . "\%s0%);");
+			}
+		</substitution>
+		<substitution val="s7">
+			if(rand(0,1)){
+				return str_replace("\'", "'","stackObject.push(\%s0%" . randset(array("Warcraft","Deception","Tiny Tim","Santa")) . "\%s0%);");
+			}
+		</substitution>
+	</substitutions>
+
+	
+	
+</question>

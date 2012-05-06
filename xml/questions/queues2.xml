@@ -1,0 +1,86 @@
+<question type="multiple">
+	<estimated_time>220</estimated_time>
+	<concepts>
+		<concept>Queues</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+int main()
+{
+  queue&lt;string&gt; queueObject;
+  
+  queueObject.push("`s1`");
+  queueObject.push("`s2`");
+  queueObject.push("`s3`");
+
+  cout &lt;&lt; "Contents of queue: ";
+  for(int i = 0; i &lt; queueObject.size(); i++) {
+    `s4`
+
+    queueObject.push( queueObject.front() ); 
+    queueObject.pop();
+  }
+  cout &lt;&lt; endl;
+
+  `s7`
+
+  while( !queueObject.empty() ) {
+    `s5`
+    `s6`
+  }
+
+  return 0;
+}
+
+
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">randset(array("Deranged","Puppy","Smells","Insensitive","Ornament"))</substitution>
+		<substitution val="s2">randset(array("Vampire","Bill","Drains","Sookie","Clean"))</substitution>
+		<substitution val="s3">randset(array("Harry","Potter","Trains","Silvery","Colleagues"))</substitution>
+		<substitution val="s4">return "cout &lt;&lt; queueObject.front() &lt;&lt; \" \";";</substitution>
+		<substitution val="s5">return "cout &lt;&lt; \"Popping \" &lt;&lt; queueObject.front() &lt;&lt; endl;";</substitution>
+		<substitution val="s6">return "queueObject.pop();";</substitution>
+		<substitution val="s7">return "";</substitution>
+	</substitutions>
+
+
+	<answers>
+		<answer>
+			<substitute val="ans">"This program will not compile"</substitute>
+			<description>This program will actually compile. If you look at the brackets, and syntax, everything is correct.</description>
+		</answer>
+		<answer>
+			<substitute val="s4">
+				//Effectively just remove S4 Substitution, making it look like the for loop never gets executed
+				return "";
+			</substitute>
+			<description>It is important that you notice the FOR loop and the line "cout &lt; &lt; queueObject.front()". This line gets the item at the front of the queue, and outputs it. The answer you chose was missing that output. The next two lines in the for loop make sure that those elements are added back into the queue.</description>
+		</answer>
+		<answer>
+			<substitute val="s5">
+				//Effectively remove the S5 substitution to make it look like after you've iterated the array, there's nothing left to pop
+				return "";
+			</substitute>
+			<description>It is important to understand that the FOR loop in this program not only reads and pops items from the queue, but it also puts them BACK, so that when the WHILE loop happens, it appears that a duplicate set of items is popped.</description>
+		</answer>
+		<answer>
+			<substitute val="s7">
+				//Making sure we actually understand what the pop function does. What if I pop a value out early?
+				return "queueObject.pop();";
+			</substitute>
+			<description>Make sure you understand the Queue.pop() and Queue.push() functions.</description>
+		</answer>
+	</answers>
+	
+	
+</question>

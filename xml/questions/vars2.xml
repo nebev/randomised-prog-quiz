@@ -1,0 +1,25 @@
+<question type="output">
+	<estimated_time>80</estimated_time>
+	<concepts>
+		<concept>Arithmetic Operators</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	cout &lt;&lt; `s1` `s2` `s3` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">rand(1,10)</substitution>
+		<substitution val="s2">randset(array("+","-","*"))</substitution>
+		<substitution val="s3">rand(1,10)</substitution>
+	</substitutions>
+</question>

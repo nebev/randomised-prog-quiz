@@ -1,0 +1,48 @@
+<question type="output">
+	<estimated_time>220</estimated_time>
+	<concepts>
+		<concept>Precedence Rules</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	int `s0` = `s1`, `s2` = `s3`;
+	cout &lt;&lt; `s0``s6``s4``s8``s7``s2``s5` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s0">randset(array("t","u"))</substitution>
+		<substitution val="s2">randset(array("g","h"))</substitution>
+
+		<substitution val="s1">rand(2,5)</substitution>
+		<substitution val="s3">rand(6,9)</substitution>
+		
+		<substitution val="s8">rand(3,4)</substitution>
+
+		<!--Brackets-->
+		<substitution val="s4">
+			if(rand(0,2)>1){
+				return "(";
+			}
+		</substitution>
+		<substitution val="s5">
+			if("%s4%"=="("){
+				return ")";
+			}
+		</substitution>
+		
+		<!--Operations-->
+		<substitution val="s6">randset(array("*","/"))</substitution>
+		<substitution val="s7">randset(array("-","*","+"))</substitution>
+		
+		
+	</substitutions>
+</question>

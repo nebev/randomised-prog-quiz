@@ -1,0 +1,45 @@
+<question type="fill-in">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Strings_fillin</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		Complete the code so that this program outputs:
+		&lt;pre&gt;%ans%&lt;/pre&gt;
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main()
+{
+	`i1`
+	 
+	string str2, str3;
+	str2 = str.substr (0,`s3`);
+
+	int pos = str.find("`s2`");
+	str3 = str.substr (pos);
+	
+	cout &lt;&lt; str3 + " " + str2 &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">randset(array("Galloping","Automatic","Hilarious","Vulnerability","Uninteresting","Bloodsucker","Constitutionally","Blabbermouth"))</substitution>
+		<substitution val="s2">return substr("%s1%",rand(-3,-6));</substitution>
+		<substitution val="s3">
+			return strlen("%s1%")-strlen("%s2%");
+		</substitution>
+	</substitutions>
+	
+	<inputboxes>
+		<inputbox val="i1" lines="2">
+	string str = "%s1%";
+		</inputbox>
+		
+	</inputboxes>
+	
+</question>

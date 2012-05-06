@@ -1,0 +1,31 @@
+<question type="output">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Arithmetic Operators</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program? (Hint. Maximum 5 Decimal Places)
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	cout &lt;&lt; `s1`.0 / `s2`.0 &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s2">rand(2,3)</substitution>
+		<substitution val="s1">
+			$i = rand(3,5);
+			if(%s2%==$i)
+				return $i+1;
+			else
+				return $i;
+		</substitution>
+
+	</substitutions>
+</question>

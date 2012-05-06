@@ -1,0 +1,36 @@
+<question type="output">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Mixed Expressions</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+	int `s0` = `s1`;
+	float `s2` = `s3``s4`;
+	cout &lt;&lt; `s0``s5``s2` &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s0">randset(array("a","c"))</substitution>
+		<substitution val="s1">rand(12,15)</substitution>
+		<substitution val="s2">randset(array("b","d"))</substitution>
+		<substitution val="s3">rand(4,6)</substitution>
+		<substitution val="s4">
+			//Decide if we're going to have a division or Multiplication operator
+			//If Multiplation, then make this number have a decimal point. If division, leave as is
+			if(rand(0,1)){
+				return "." . rand(1,9);
+			}
+		</substitution>
+		<substitution val="s5">if("%s4%"==""){return "/";}else{ return "*"; }</substitution>
+	</substitutions>
+</question>

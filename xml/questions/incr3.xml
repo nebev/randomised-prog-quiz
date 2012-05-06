@@ -1,0 +1,25 @@
+<question type="output">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Incrementation</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+class ExampleProgram {
+  public static void main(String[] args){
+    System.out.println("I'm a Simple Program");
+  }
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">rand(2,22)</substitution>
+		<substitution val="s2">randset(array("x","y","z"))</substitution>
+		<substitution val="s3">randset(array("++","--"))</substitution>
+		<substitution val="s4">randset(array("+","-"))</substitution>
+		<substitution val="s5">rand(1,5)</substitution>
+	</substitutions>
+</question>

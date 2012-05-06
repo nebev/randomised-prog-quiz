@@ -1,0 +1,49 @@
+<question type="fill-in">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Factorial_fillin</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		Complete the code so that this program outputs:
+		&lt;pre&gt;%ans%&lt;/pre&gt;
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main()
+{
+	cout &lt;&lt; "`s1`! = " &lt;&lt; factorial(`s1`) &lt;&lt; endl;
+	cout &lt;&lt; "`s2`! = " &lt;&lt; factorial(`s2`) &lt;&lt; endl;
+	cout &lt;&lt; "0! = " &lt;&lt; factorial(0) &lt;&lt; endl;
+}
+
+int factorial(int number) {
+    int temp;
+    if(number &lt;= 1) 
+		return 1;
+    temp = number * factorial(number - 1);
+      return temp;
+}
+
+
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">rand(7,15)</substitution>
+		<substitution val="s2">rand(16,21)</substitution>
+		<substitution val="s3">
+			return strlen("%s1%")-strlen("%s2%");
+		</substitution>
+	</substitutions>
+	
+	<inputboxes>
+		<inputbox val="i1" lines="2">
+	string str = "%s1%";
+		</inputbox>
+		
+	</inputboxes>
+	
+</question>

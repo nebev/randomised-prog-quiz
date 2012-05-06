@@ -1,0 +1,47 @@
+<question type="output">
+	<estimated_time>80</estimated_time>
+	<concepts>
+		<concept>Conditions</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main(){
+	
+	
+	int result = `s3`, `s1` = `s4`, `s2` = `s5`;
+
+	if ( `s1` > `s2` )
+		result--;
+	else if ( `s1` == `s2` )
+		result++;
+	else
+		result = 0;	
+		
+	cout &lt;&lt; result &lt;&lt; endl;
+}
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">randset(array("a","c","e","g","i"))</substitution>
+		<substitution val="s2">randset(array("b","d","f","h","j"))</substitution>
+		<substitution val="s3">rand(5,89)</substitution>
+		<substitution val="s4">rand(5,25)</substitution>
+		<substitution val="s5">
+			//Equal chance of any condition happenning
+			$decidor=rand(0,2);
+			if($decidor==0){
+				return %s4%+rand(1,10); //First result
+			}elseif($decidor==1){
+				return %s4%;
+			}else{
+				return %s4%-rand(2,15);
+			}
+		</substitution>
+	</substitutions>
+</question>
