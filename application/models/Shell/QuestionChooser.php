@@ -1,4 +1,22 @@
 <?php
+/**
+ *  Randomised Programming Quiz System - A quiz system that develops random programming questions from defined templates
+ *  Copyright (C) 2010-2012 Ben Evans <ben@nebev.net>
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
+
 //This file effectively provides a function which will return a QuestionBase with a particlar difficulty
 //	based on a student and a quizAttempt that is passed to it. It takes into account all the questions the student
 //	has PREVIOUSLY done for this quizAttempt - including whether or not the answer was right, and the time it took.
