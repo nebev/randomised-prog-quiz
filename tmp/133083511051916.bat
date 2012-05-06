@@ -1,1 +1,0 @@
-java -cp "C:\xampp\htdocs\rqz\tmp\133083511051916" ExampleProgram > "C:\xampp\htdocs\rqz\tmp\133083511051916.txt"
