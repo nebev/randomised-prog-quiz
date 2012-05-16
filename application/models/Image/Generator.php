@@ -30,19 +30,8 @@
 	
 	
 		public function makeImage($mImageText){
-			$rows = explode("\n", $mImageText);
-
-			// This ensues any lines marked with //HIDE get hidden
-			$new_rows = array();
-			for( $i = 0; $i < sizeof($rows); $i++ ) {
-				if( strpos($rows[$i], "//HIDE") === false && strlen( str_replace("\t", "", $rows[$i]) ) > 2 ) {
-					$new_rows[] = $rows[$i];
-				}
-			}
-
-			$rows = $new_rows;
-			unset($new_rows);
-			
+			$rows = explode("\n", View_Helper_Question::format_for_text($mImageText, false) );
+		
 			$im = imagecreate(600, 30*sizeof($rows) + 50);
 
 			$bg = imagecolorallocate($im, 255, 255, 255);

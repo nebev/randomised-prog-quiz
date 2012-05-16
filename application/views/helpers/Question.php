@@ -20,19 +20,36 @@
 		
 		/**
 		 * Takes Question text, and formats it appropriately
+		 * @param string $question_text - Unescaped Question text
+		 * @param boolean $include_explanations - Whether or not you want explanations with this text (if present in the question)
+		 * @return mixed - Returns string if $include_explanations == false, array with keys [question] and [explanations] (each being arrays of strings)
 		 */
-		public static function format_for_text( $question_text ) {
+		public static function format_for_text( $question_text, $include_explanations = false ) {
 			
 			$rows = explode("\n", $question_text);
 			
 			// This ensues any lines marked with //HIDE get hidden
 			$new_rows = array();
+			$explanations = array();
+			
 			for( $i = 0; $i < sizeof($rows); $i++ ) {
 				$rows[$i] = str_replace("<","&lt;",str_replace(">","&gt;", $rows[$i] ) );
 				
 				if( strpos($rows[$i], "//HIDE") === false && strlen( str_replace("\t", "", $rows[$i]) ) > 2 ) {
-					$new_rows[] = $rows[$i];
+			
+					$exploded_line = explode("////", $rows[$i]);
+					if( sizeof($exploded_line) > 1 ) {
+						$explanations[] = $exploded_line[1];
+					}else{
+						$explanations[] = "";
+					}
+
+					$new_rows[] = $exploded_line[0];
 				}
+			}
+			
+			if( $include_explanations === true ) {
+				return array( "question" => $new_rows, "explanations" => $explanations );
 			}
 			
 			return implode("\n", $new_rows);
