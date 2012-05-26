@@ -405,9 +405,11 @@ class AdminController extends Zend_Controller_Action
 		foreach($vGroups as $vGroup){
 			//Get the members of this group
 			$vMembers = Model_Auth_ActiveDirectory::getUsersFromGroup( $vGroup );
-			foreach($vMembers as $vMember){
-				Model_Auth_ActiveDirectory::updateUser($vMember);
-				$vCounter++;
+			if( is_array($vMembers) && sizeof($vMembers) > 0 ) {
+				foreach($vMembers as $vMember){
+					Model_Auth_ActiveDirectory::updateUser($vMember);
+					$vCounter++;
+				}
 			}
 		}
 		

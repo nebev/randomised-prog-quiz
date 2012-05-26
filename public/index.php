@@ -14,7 +14,6 @@ defined('APPLICATION_ENV')
 set_include_path(implode(PATH_SEPARATOR, array(
 	APPLICATION_PATH,
     realpath(APPLICATION_PATH . '/../library'),
-	"C:\zend\ZendFramework-1.11.11\library",
     get_include_path(),
 )));
 

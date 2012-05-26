@@ -62,7 +62,15 @@ class IndexController extends Zend_Controller_Action
 		
     }
 	
-	
+	/**
+	 * Displays basic User information
+	 *
+	 * @return void
+	 * @author Ben Evans
+	 */
+	public function userinfoAction() {
+		$this->view->user_details = Model_Auth_ActiveDirectory::getUserDetails($this->view->username);
+	}
 	
 	
 	public function availableAction() {

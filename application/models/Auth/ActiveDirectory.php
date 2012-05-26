@@ -87,6 +87,13 @@ class Model_Auth_ActiveDirectory extends Model_Auth_General{
 		return $adldap->group_members($group);
 	}
 	
+	/**
+	 * Returns Basic User Details
+	 *
+	 * @param string $username 
+	 * @return array
+	 * @author Ben Evans
+	 */
 	public static function getUserDetails( $username ) {
 		
 		// Start by consulting the local database first
@@ -111,7 +118,7 @@ class Model_Auth_ActiveDirectory extends Model_Auth_General{
 			$vUser[0]['givenname'] = array("");
 		}
 		
-		return array( "first_name" => $vUser[0]['sn'][0], "last_name" => $vUser[0]['givenname'][0] );
+		return array( "last_name" => $vUser[0]['sn'][0], "first_name" => $vUser[0]['givenname'][0] );
 	}
 	
 	private static function updateCache( $username, $last_name, $first_name ) {
