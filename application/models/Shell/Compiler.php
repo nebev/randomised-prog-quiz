@@ -57,34 +57,46 @@ class Model_Shell_Compiler{
 			$fh = fopen( Model_Shell_Compiler::os_slash("$mTempFolder/".$vFilePrefix.".java")  , 'w');
 	        fwrite($fh,$mSource);
 	        fclose($fh);
-
-			die("Linux Support for Java Hasn't been implemented just yet");
+			
+			// Java sometimes generates more than one class... so we put the compiled things in a directory
+			mkdir( $mTempFolder . "/" . $vFilePrefix );
+			
 			
 			// Run the program that we outputted to a file into a fully functioning Executable
-			$toExec = "g++ \"" . $mTempFolder . "/".$vFilePrefix.".cpp\" -o \"" . $mTempFolder . "/".$vFilePrefix."\"";
-			echo "EXECUTING: " . $toExec;
+			$toExec = "javac \"" . $mTempFolder . "/".$vFilePrefix.".java\" -d \"" . $mTempFolder . "/" . $vFilePrefix . "\"";
 			$execResult = exec($toExec);
 
+			// OK Now we need to see what classes have been generated in this directory, and then call that when executing
+			$directory_contents = scandir( $mTempFolder . "/" . $vFilePrefix );
+			if( sizeof($directory_contents) < 3 ) {
+				throw new Exception("When Trying to generate a new randomised question, Compilation Failed. Reason: " . $execResult);
+			}
 
-			//Now make sure it compiled
-			if(file_exists("$mTempFolder/".$vFilePrefix)){
-		                
-						// Now what we do is RUN the execuatble file, and grab its output...
-						$toExec =  "timeout 5 \"" . $mTempFolder . "/".$vFilePrefix."\" > \"" . $mTempFolder . "/".$vFilePrefix.".txt\"";
-	                	//echo "EXECUTING: " . $toExec;
-		                exec($toExec);
-	
-		                $vContents = file_get_contents("$mTempFolder/".$vFilePrefix.".txt");
-	
-		                //Delete all the stuff we made
-		                unlink("$mTempFolder/".$vFilePrefix.".java");
-		                unlink("$mTempFolder/".$vFilePrefix);
-		                unlink("$mTempFolder/".$vFilePrefix.".txt");
-		                return $vContents;
+			// At this point, I'm assuming we have only 1 main class
+			$program_to_run = null;
+			foreach( $directory_contents as $dc ) {
+				if( strlen($dc) > 5 ) {
+					$program_to_run = str_replace(".class", "", $dc);
+				}
+			}
+			
+			if( !is_null($program_to_run) ){
 
-		        }else{
-					throw new Exception("When attempting to Compile a file (for a new Random Question), an Error Occured. Details:" . $execResult);
-		        }
+				$toExec = "timeout 5 java -cp \"" . $mTempFolder . "/" . $vFilePrefix . "\" " . $program_to_run . " > \"" . $mTempFolder . "/" . $vFilePrefix . ".txt\"";
+				exec($toExec);	
+
+				$vContents = file_get_contents( Model_Shell_Compiler::os_slash( "$mTempFolder/".$vFilePrefix.".txt" ) );
+
+				//Delete all the stuff we made
+				unlink("$mTempFolder/".$vFilePrefix.".java");
+				unlink("$mTempFolder/".$vFilePrefix.".txt");
+				Model_Utils_Filesystem::delete_directory($mTempFolder . "/" . $vFilePrefix );
+
+				return $vContents;
+
+			}else{
+				return "Compilation failed! Reason:" . $execResult;
+			}
 
 
 		}else{
