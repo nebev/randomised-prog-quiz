@@ -45,6 +45,7 @@
 		$vCorrect = false;
 	
 		if($vType=="output"){
+			
 			//Mark the textinput called ans
 			echo "<p>Your output:</p>\n";
 			echo "<pre>".$_POST['ans']."</pre>\n";
@@ -72,13 +73,16 @@
 				if(strcmp($s1,$s2)==0){
 					$vCorrect=true;
 				}
-			}	
+			}
+			
 		}elseif($vType=="multiple"){
+			
 			if($_POST['altans']!="1" && $_POST['altans']!="2" && $_POST['altans']!="3" && $_POST['altans']!="4"){
 				die("Invalid Choice Passed.");
 			}
 		
 			echo "<p>Your choice: " . $_SESSION['mc_data'][$_POST['altans']] . "</p>\n"; 
+			
 			//Is it right?
 			if($_SESSION['mc_data'][$_POST['altans']] == $mQuestionAttempt->getGeneratedQuestion()->getCorrect_answer() ){
 				$vCorrect=true;
@@ -97,6 +101,7 @@
 				}
 			
 			}
+			
 		}elseif($vType=="fill-in"){
 		
 			//Start by taking the problem, removing the textareas and substituting our submitted solution
@@ -144,7 +149,8 @@
 		}else{
 		
 			//First or last attempt?
-			if($mQuestionAttempt->getInitial_result()==null){
+			if($mQuestionAttempt->getInitial_result() == null){
+				
 				$mQuestionAttempt->setInitial_result("0");
 				echo "<p>That answer was incorrect. You will get a second attempt</p>\n";
 						
@@ -155,8 +161,16 @@
 				$mQuestionAttempt->setTime_finished(strtotime("now"));
 			
 				echo "<p>That answer was also incorrect. You will now be given a new question</p>\n";
+				
+				// Display the Question again
+				$question_text = $mQuestionAttempt->getGeneratedQuestion()->getQuestion_data();
+				echo "<h3>Examined Question</h3>\n";
+				echo "<div class='question-answer'>" . View_Helper_Question::output_with_hints($question_text) . "</div>\n";
+				echo "<div id='question-hint-box'></div>\n";
+				
 				//Show them the correct answer if it's not a fill-in
 				if($vType!="fill-in"){
+					echo "<h3>Correct Answer</h3>\n";
 					echo "<p>The correct answer was: </p>\n";
 					echo "<pre>".$mQuestionAttempt->getGeneratedQuestion()->getCorrect_answer()."</pre>\n";
 				}else{

@@ -340,7 +340,7 @@ class AdminController extends Zend_Controller_Action
 						//Add to questionBase (if not already there)
 						$vQuestionBase = Model_Quiz_QuestionBase::fromXml($file);
 						if($vQuestionBase == null){
-							$vQuestionBase = QuestionBase::fromScratch($file, $vQuestion->getDifficulty(), $vQuestion->getEstimatedTime(), $vQuestion->getFriendlyType(), strtotime("today"));
+							$vQuestionBase = Model_Quiz_QuestionBase::fromScratch($file, $vQuestion->getDifficulty(), $vQuestion->getEstimatedTime(), $vQuestion->getFriendlyType(), strtotime("today"));
 						}
 
 

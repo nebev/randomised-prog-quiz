@@ -55,6 +55,35 @@
 			return implode("\n", $new_rows);
 		}
 		
+		/**
+		 * Returns HTML Formatted Text for Question Display on the 'answer' page
+		 *
+		 * @param string $question_text 
+		 * @return void
+		 * @author Ben Evans
+		 */
+		public static function output_with_hints( $question_text ) {
+			$text_and_hints = View_Helper_Question::format_for_text($question_text, true);
+			$question = $text_and_hints['question'];
+			$hints = $text_and_hints['explanations'];
+			
+			$return_text = "";
+			
+			for( $i = 0; $i < sizeof($question); $i++ ) {
+				if( array_key_exists($i, $hints) && strlen($hints[$i]) > 0 ) {
+					$return_text .= "<div class='question-explanation-holder' id='question-explanation-holder-$i' onClick='showExplanation($i);'></div>";
+					$return_text .= "<div class='question-explanation-details' id='question-explanation-details-$i' >". $hints[$i] ."</div>";
+				}else{
+					$return_text .= "<div class='question-blank-holder'></div>";
+				}
+				
+				$question[$i] = str_replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;", $question[$i]);
+				
+				$return_text .= "<div class='question-text-output' id='question-text-output-$i'>" . $question[$i] . "</div>\n";
+			}
+			return $return_text;
+		}
+		
 		
 	}
 

@@ -11,3 +11,43 @@
 	color:#382908;
 	margin-bottom:25px;
 }
+
+
+
+.question-text-output{
+	font-family: Courier;
+	display:block;
+}
+
+.question-explanation-details{
+	display:none;
+}
+
+.question-explanation-holder{
+	background-image: url(../images/idea.png);
+}
+
+.question-explanation-holder:hover{
+	cursor:help;
+}
+
+
+.question-blank-holder{
+	background-color:#FFFFFF;
+}
+
+.question-blank-holder, .question-explanation-holder{
+	display:block;
+	float:left;
+	width:15px;
+	height:15px;
+	margin-right:25px;
+}
+
+#question-hint-box {
+	margin:15px;
+	display:none;
+	border:1px solid #DDD;
+	padding:15px;
+	background-color:#EEE;
+}

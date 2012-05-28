@@ -11,8 +11,8 @@
 	class ExampleProgram {												//HIDE
 		public static void main(String[] args){							//HIDE
 			
-int `s10` = `s2`;
-for(int i=`s3`; i `s4` `s5`; i`s6`=`s7`)
+int `s10` = `s2`;								////Sets Variable "`s10`" to the value `s2`
+for(int i=`s3`; i `s4` `s5`; i`s6`=`s7`)		////`s11`
 	`s10` = `s10` `s8` `s9`;
 
 			System.out.println(`s10`);									//HIDE
@@ -63,6 +63,33 @@ for(int i=`s3`; i `s4` `s5`; i`s6`=`s7`)
 		<substitution val="s9">rand(1,7)</substitution>
 		
 		<substitution val="s10">randset( array("result", "val", "a", "x") )</substitution>
+		
+		<substitution val="s11">
+			$return = "The variable `i` will first be %s3%, and after each loop iteration, ";
+			if( "%s6%" == "*" ) { $return .= "`i` will be multiplied by %s7%"; }
+			if( "%s6%" == "+" ) { $return .= "%s7% will be added to `i`"; }
+			if( "%s6%" == "-" ) { $return .= "%s7% will be subtracted from `i`"; }
+			if( "%s6%" == "/" ) { $return .= "`i` will be divided by %s7%"; }
+			
+			$return .= ". Given the condition i %s4% %s5%, this loop will ";
+			$counter = 0;
+			for(  $i=%s3%; $i %s4% %s5%; intval($i%s6%=%s7%) ) {
+				$counter++;
+				
+				// In case we get caught out
+				if($counter > 15){
+					$counter = "several";
+					break;
+				}
+			}
+			
+			if( $counter == 0 ) { $return .= "never execute."; }
+			elseif( $counter == 1 ) { $return .= "execute only once."; }
+			else{ $return .= "execute " . $counter . " times."; }
+			
+			return $return;
+		</substitution>
+		
 		
 	</substitutions>
 </question>
