@@ -1,0 +1,26 @@
+<question type="output">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Incrementation</concept>
+	</concepts>
+	<difficulty>3</difficulty>
+	<instructions>
+		What is the value of "%s0%" at the end this program?
+	</instructions>
+	<problem>
+class ExampleProgram {												//HIDE
+public static void main(String[] args){							//HIDE
+int `s0` = `s1`, `s2` = `s3`;
+`s0` `s5`= `s2`;
+System.out.println(`s0`);	//HIDE
+}}//HIDE
+	</problem>
+	
+	<substitutions>
+		<substitution val="s0">randset(array("a","b"))</substitution>
+		<substitution val="s1">rand(2,32)</substitution>
+		<substitution val="s2">randset(array("x","y","z"))</substitution>
+		<substitution val="s3">rand(12,25)</substitution>
+		<substitution val="s5">randset(array("+","-","%"))</substitution>
+	</substitutions>
+</question>

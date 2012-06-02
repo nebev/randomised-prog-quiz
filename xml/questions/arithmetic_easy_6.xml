@@ -1,0 +1,30 @@
+<question type="output">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Arithmetic Operators</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program? (Hint. Maximum 4 Decimal Places)
+	</instructions>
+	<problem>
+import java.text.DecimalFormat; //HIDE
+class ExampleProgram {												//HIDE
+public static void main(String[] args){							//HIDE
+DecimalFormat df = new DecimalFormat("#0.####");
+System.out.println(df.format( `s1`.0 / `s2`.0 ));
+}}//HIDE
+	</problem>
+	
+	<substitutions>
+		<substitution val="s2">rand(2,3)</substitution>
+		<substitution val="s1">
+			$i = rand(3,5);
+			if(%s2%==$i)
+				return $i+1;
+			else
+				return $i;
+		</substitution>
+
+	</substitutions>
+</question>

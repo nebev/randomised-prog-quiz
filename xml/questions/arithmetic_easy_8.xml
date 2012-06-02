@@ -1,0 +1,21 @@
+<question type="output">
+	<estimated_time>120</estimated_time>
+	<concepts>
+		<concept>Arithmetic Operators</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+class ExampleProgram { public static void main(String[] args){ //HIDE
+System.out.println(-`s1`%`s2`);
+}}//HIDE
+	</problem>
+	
+	<substitutions>
+		<substitution val="s2">rand(2,7)</substitution>
+		<substitution val="s1">rand(3,12)</substitution>
+
+	</substitutions>
+</question>

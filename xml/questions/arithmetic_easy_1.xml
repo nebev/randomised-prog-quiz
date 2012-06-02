@@ -1,0 +1,75 @@
+<question type="multiple">
+	<estimated_time>180</estimated_time>
+	<concepts>
+		<concept>Variables</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the printed output of K?
+	</instructions>
+	<problem>
+		class ExampleProgram {												//HIDE
+			public static void main(String[] args){							//HIDE
+			
+int i = `s1`;
+i = i `s2` `s3`;
+int j = i;
+int k = j `s4` `s5`;
+k = k `s6` `s7`;
+System.out.println(k);
+		}//HIDE
+		}//HIDE
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">rand(1,10)</substitution>
+		<substitution val="s2">randset(array("+","-"))</substitution>
+		<substitution val="s3">rand(20,40)</substitution>
+		<substitution val="s4">
+			//If 'j' is an even number, we should put a divide in here
+			//	if it's not, just use a normal + or -
+
+			if((%s1% %s2% %s3%)%2==0){
+				return "/";
+			}else{
+				return randset(array("+","-"));
+			}
+		</substitution>
+		<substitution val="s5">
+			//If we've had a "/" in S4, put a 2
+			//	(because it's easy to divide by 2)
+			
+			if("%s4%" == "/"){
+				return 2;
+			}else{
+				return rand(1,19);
+			}
+		</substitution>
+		<substitution val="s6">randset(array("+","-"))</substitution>
+		<substitution val="s7">rand(0,50)</substitution>
+	</substitutions>
+	
+	
+	<answers>
+		<answer>
+			<substitute val="ans">return %ans% + rand(1,10);</substitute>
+		</answer>
+		<answer>
+			<substitute val="s2">
+				if( "%s2%" == "+" ) {
+					return "-";
+				}else{
+					return "+";
+				}
+			</substitute>
+			<description>Be careful of your operators. + and - do different things</description>
+		</answer>
+		<answer>
+			<substitute val="ans">rand(25,45)</substitute>
+		</answer>
+		<answer>
+			<substitute val="ans">%ans% - rand (1,15)</substitute>
+		</answer>
+	</answers>
+	
+</question>

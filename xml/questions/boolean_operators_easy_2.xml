@@ -1,0 +1,32 @@
+<question type="output">
+	<estimated_time>30</estimated_time>
+	<concepts>
+		<concept>Boolean Statements</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+class ExampleProgram {												//HIDE
+	public static void main(String[] args){							//HIDE
+double `s1` = `s2`.`s3`;
+System.out.println(`s1` `s5` `s4`);
+}//HIDE
+}//HIDE
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">randset(array("c","r","a","p"))</substitution>
+		<substitution val="s2">rand(-5,23)</substitution>
+		<substitution val="s3">rand(1,99)</substitution>
+		<substitution val="s4">
+			if(rand(0,1)==1){
+				return ceil(%s2%.%s3%);
+			}else{
+				return floor(%s2%.%s3%);
+			}
+		</substitution>
+		<substitution val="s5">randset(array("==","&lt;=","&gt;="))</substitution>
+	</substitutions>
+</question>

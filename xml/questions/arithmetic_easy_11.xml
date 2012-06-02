@@ -1,0 +1,23 @@
+<question type="output">
+	<estimated_time>150</estimated_time>
+	<concepts>
+		<concept>Arithmetic Operators</concept>
+	</concepts>
+	<difficulty>3</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+class ExampleProgram { public static void main(String[] args){ //HIDE
+int `s4` = `s1`;
+System.out.println(`s2``s3``s4`);
+}}//HIDE
+	</problem>
+	
+	<substitutions>
+		<substitution val="s2">rand(2,18)</substitution>
+		<substitution val="s1">rand(3,12)</substitution>
+		<substitution val="s3">randset(array("%","/"))</substitution>
+		<substitution val="s4">randset(array("x","y","z"))</substitution>
+	</substitutions>
+</question>

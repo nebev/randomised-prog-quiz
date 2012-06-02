@@ -1,0 +1,35 @@
+<question type="output">
+	<estimated_time>80</estimated_time>
+	<concepts>
+		<concept>Conditions</concept>
+	</concepts>
+	<difficulty>1</difficulty>
+	<instructions>
+		What is the value of `result` at the end of this program?
+	</instructions>
+	<problem>
+class ExampleProgram {												//HIDE
+	public static void main(String[] args){							//HIDE
+	int result = `s1`, b = `s3`, `s4` = `s2`;
+	if( b*2 == `s4` )
+		result = result + 1; ////This just adds one to `result`. Another way is to use "result++;"
+	else
+		result = result - 1;
+		
+	System.out.println(result);	//HIDE
+}}//HIDE
+	</problem>
+	
+	<substitutions>
+		<substitution val="s2">rand(1,10)*2</substitution>
+		<substitution val="s1">(rand(4,7)*2)</substitution>
+		<substitution val="s3">
+			if(rand(0,1)==1){
+				return %s2%/2;
+			}else{
+				return %s2%-3;
+			}
+		</substitution>
+		<substitution val="s4">randset(array("c","z","s"))</substitution>
+	</substitutions>
+</question>

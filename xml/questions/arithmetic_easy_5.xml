@@ -1,0 +1,28 @@
+<question type="output">
+	<estimated_time>80</estimated_time>
+	<concepts>
+		<concept>Arithmetic Operators</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+class ExampleProgram {												//HIDE
+public static void main(String[] args){							//HIDE
+System.out.println(`s1` / `s2`);
+}}//HIDE
+	</problem>
+	
+	<substitutions>
+		<substitution val="s2">rand(2,3)</substitution>
+		<substitution val="s1">
+			$i = rand(3,5);
+			if(%s2%==$i)
+				return $i+1;
+			else
+				return $i;
+		</substitution>
+
+	</substitutions>
+</question>

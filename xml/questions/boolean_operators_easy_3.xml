@@ -1,0 +1,24 @@
+<question type="output">
+	<estimated_time>30</estimated_time>
+	<concepts>
+		<concept>Boolean Statements</concept>
+	</concepts>
+	<difficulty>2</difficulty>
+	<instructions>
+		What is the given output of this program?
+	</instructions>
+	<problem>
+class Main{	//HIDE
+	public static void main (String[] args) throws java.lang.Exception{ //HIDE
+	boolean `s1` = `s2`;
+	System.out.println(`s3``s1`);
+}//HIDE
+}//HIDE
+	</problem>
+	
+	<substitutions>
+		<substitution val="s1">randset(array("kay","bee","ex","que"))</substitution>
+		<substitution val="s2">randset(array("true","false"))</substitution>
+		<substitution val="s3">randset(array("!!","!","!!!"))</substitution>
+	</substitutions>
+</question>
