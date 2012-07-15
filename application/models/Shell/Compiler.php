@@ -20,6 +20,8 @@
 
 class Model_Shell_Compiler{
 	
+	const NIX_OSES = "linux,darwin";
+	
 	public static function compileAndReturn($vFilePrefix, $mSource){
 		$mTempFolder = Model_Shell_Compiler::os_slash(APPLICATION_PATH . "/../tmp");
 		
@@ -43,7 +45,7 @@ class Model_Shell_Compiler{
 	 */
 	private static function java_compile_and_return($mTempFolder, $vFilePrefix, $mSource) {
 		
-		if(strtolower(PHP_OS)=="linux"){
+		if(in_array(strtolower(PHP_OS), explode(",", self::NIX_OSES) )){
 			
 			// Clean up any old existing files
 			if(file_exists(   Model_Shell_Compiler::os_slash("$mTempFolder/".$vFilePrefix.".java")  )){

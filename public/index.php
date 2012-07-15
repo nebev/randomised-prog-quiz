@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-
 
 // Define path to application directory
 defined('APPLICATION_PATH')
@@ -16,6 +14,20 @@ set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . '/../library'),
     get_include_path(),
 )));
+
+
+// Check to see if all required files exist
+if( !file_exists(APPLICATION_PATH . '/configs/application.ini') || !file_exists(APPLICATION_PATH . '/configs/general.php') ) {
+	die("Cannot Find application.ini / general.php");
+}
+if( !is_writable(APPLICATION_PATH . "/../tmp") ) {
+	die("Either ". realpath(APPLICATION_PATH . "/../") ."/tmp doesn't exist, or is not writable");
+}
+if( !extension_loaded('gd') ) {
+	die("GD2 is not installed. Please enable it");
+}
+
+
 
 /** Zend_Application */
 require_once 'Zend/Application.php';
