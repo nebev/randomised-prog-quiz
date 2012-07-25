@@ -83,7 +83,7 @@ class Model_Quiz_Concept
 		$stmt = $db->query($sql);
 		$row = $stmt->fetch();
 		if($row['concept_name']!=null){
-			return Concept::fromID($row['concept_name']);
+			return Model_Quiz_Concept::fromID($row['concept_name']);
 		}else{
 			return null; //Something didn't happen
 		}
