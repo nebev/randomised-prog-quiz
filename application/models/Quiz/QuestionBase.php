@@ -102,7 +102,7 @@ class Model_Quiz_QuestionBase
 		//Now find the appropriate entry in the database
 		//	A safe (default) assumption for this is a query that looks for everything you just put in.
 		
-		$sql = "SELECT question_id FROM question_base WHERE xml='".$db->quote($xml)."'";
+		$sql = "SELECT question_id FROM question_base WHERE xml=".$db->quote($xml)."";
 		
 		$result = $db->query($sql);
 		$row = $result->fetch();
