@@ -42,6 +42,7 @@
 				
 				//Interpret TABs correctly (this is WAAAAAY Beta)
 				$row = str_replace("\t","      ",$row);
+				$row = html_entity_decode($row);
 				imagettftext($im, 12, 0, 5, ($rowNum*23)+50, $textcolor, APPLICATION_PATH . "/../resources/couri.ttf", $row);
 
 				//imagestring($im, 5, 0, $rowNum*30, $row, $textcolor);
