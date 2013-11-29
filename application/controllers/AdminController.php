@@ -19,9 +19,14 @@
 
 
 
-class AdminController extends Zend_Controller_Action
-{
+class AdminController extends Zend_Controller_Action {
 
+	/**
+	 * Initialises the Administrative Controller
+	 *
+	 * @return void
+	 * @author Ben Evans
+	 */
     public function init(){
         $this->_auth = Zend_Auth::getInstance();
 		
@@ -67,6 +72,12 @@ class AdminController extends Zend_Controller_Action
 	}
 
 
+	/**
+	 * Adds or Edits a Quiz
+	 *
+	 * @return void
+	 * @author Ben Evans
+	 */
 	public function addeditAction() {
 		
 		// The Form
@@ -92,9 +103,6 @@ class AdminController extends Zend_Controller_Action
 			$form->getElement("closedate")->setValue(date("Y-m-d",$editing->getClose_date()));
 			$form->getElement("attempts")->setValue($editing->getMax_attempts());
 			$form->getElement("percentage")->setValue($editing->getPercentage_pass());
-
-			
-			
 		}
 		
 	
@@ -126,13 +134,16 @@ class AdminController extends Zend_Controller_Action
 				$this->_helper->redirector("manage", "admin");
 			}
 		}
-
-		
-		
 	}
 
 
-
+	/**
+	 * Deletes a quiz
+	 * Expects parameter [id]
+	 *
+	 * @return void
+	 * @author Ben Evans
+	 */
 	public function deletequizAction() {
 		
 		$quiz_id = $this->_getParam("id");
@@ -148,6 +159,13 @@ class AdminController extends Zend_Controller_Action
 
 
 
+	/**
+	 * Displays the Concepts for a Given Quiz
+	 * Expects the quiz id as parameter [id]
+	 *
+	 * @return void
+	 * @author Ben Evans
+	 */
 	public function showconceptsAction() {
 		
 		//Grab the Quiz
@@ -160,7 +178,6 @@ class AdminController extends Zend_Controller_Action
 		$this->view->quiz = $quiz;
 
 		$this->view->concepts = Model_Quiz_Concept::getAll();
-		
 	}
 
 
@@ -198,6 +215,13 @@ class AdminController extends Zend_Controller_Action
 	}
 
 
+	/**
+	 * Deletes a Concept
+	 * Expects parameter [concept_id] to be passed
+	 *
+	 * @return void
+	 * @author Ben Evans
+	 */
 	public function deleteconceptAction() {
 		$concept_id = $this->_getParam("concept_id");
 		if( !isset($concept_id) ) {

@@ -27,7 +27,7 @@ abstract class Model_Auth_General extends Zend_DB_Table_Abstract{
 	 * @return boolean
 	 * @author Ben Evans
 	 */
-	abstract public static function authenticate($username, $password);
+	abstract public function authenticate($username, $password);
 	
 	
 	public static function getAuthModel() {

@@ -24,9 +24,11 @@ if( !is_writable(APPLICATION_PATH . "/../tmp") ) {
 	die("Either ". realpath(APPLICATION_PATH . "/../") ."/tmp doesn't exist, or is not writable");
 }
 if( !extension_loaded('gd') ) {
-	die("GD2 is not installed. Please enable it");
+	die("The GD2 Extension for PHP is not enabled. Please enable it");
 }
-
+if( !extension_loaded('ldap') ) {
+	die("The LDAP Extension for PHP is not enabled. Please enable it");
+}
 
 
 /** Zend_Application */

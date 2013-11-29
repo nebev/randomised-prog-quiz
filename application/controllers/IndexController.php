@@ -1,7 +1,7 @@
 <?php
 /**
  *  Randomised Programming Quiz System - A quiz system that develops random programming questions from defined templates
- *  Copyright (C) 2010-2012 Ben Evans <ben@nebev.net>
+ *  Copyright (C) 2010-2013 Ben Evans <ben@nebev.net>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,9 +16,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-class IndexController extends Zend_Controller_Action
-{
+class IndexController extends Zend_Controller_Action {
 
+	/**
+	 * Initialises the Index Controller
+	 *
+	 * @return void
+	 * @author Ben Evans
+	 */
     public function init(){
         $this->_auth = Zend_Auth::getInstance();
 		
@@ -73,6 +78,12 @@ class IndexController extends Zend_Controller_Action
 	}
 	
 	
+	/**
+	 * Shows Available Quizzes for the logged in User
+	 *
+	 * @return void
+	 * @author Ben Evans
+	 */
 	public function availableAction() {
 		$this->view->headTitle("Available Quizzes");
 		
@@ -121,6 +132,12 @@ class IndexController extends Zend_Controller_Action
 	}
 	
 	
+	/**
+	 * Shows the Hall of Fame for the Logged in User
+	 *
+	 * @return void
+	 * @author Ben Evans
+	 */
 	public function halloffameAction() {
 		$this->view->title = "Hall of Fame";
 		$this->view->headTitle("Hall of Fame");
@@ -204,7 +221,12 @@ class IndexController extends Zend_Controller_Action
 	
 	
 	
-	
+	/**
+	 * An Administrative function that tests Question Generation
+	 *
+	 * @return void
+	 * @author Ben Evans
+	 */
 	public function testquestiongenerationAction() {
 		if( !$this->view->is_admin ) {
 			throw new Exception("Access Denied");

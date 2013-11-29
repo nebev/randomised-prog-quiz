@@ -18,7 +18,7 @@
  **/	
 class Model_Auth_ActiveDirectory extends Model_Auth_General{
 
-	private static function load_module() {
+	protected static function load_module() {
 		
 		// Load up the AD-LDAP module
 		include_once("adldap/adLDAP.php");
@@ -57,8 +57,8 @@ class Model_Auth_ActiveDirectory extends Model_Auth_General{
 			"account_suffix"		=> $ldap_config['account_suffix'],
 			"base_dn"				=> $ldap_config['base_dn'],
 			'domain_controllers'	=> $domain_controllers,
-			'ad_username'			=> $ldap_config['username'],
-			'ad_password'			=> $ldap_config['password'],
+			'admin_username'			=> $ldap_config['username'],
+			'admin_password'			=> $ldap_config['password'],
 			'use_ssl'				=> intval( $ldap_config['usessl'] ),
 			"use_tls"				=> intval( $ldap_config['usetls'] )
 		);
@@ -71,21 +71,54 @@ class Model_Auth_ActiveDirectory extends Model_Auth_General{
 	}
 
 
-	public static function authenticate($username, $password) {
+	public function authenticate($username, $password) {
 		$adldap = Model_Auth_ActiveDirectory::load_module();
 		return $adldap->authenticate( $username, $password );
 	}
 
-	
+	/**
+	 * Returns true if a user is part of the Active Directory Group passed
+	 *
+	 * @param string $username 
+	 * @param string $group 
+	 * @return boolean
+	 * @author Ben Evans
+	 */
 	public function userInGroup( $username, $group ) {
 		$adldap = Model_Auth_ActiveDirectory::load_module();
-		return $adldap->user_ingroup($username,$group,true);
+		$ad_groups = $adldap->user()->groups($username, true);
+		foreach($ad_groups as $ad_group) {
+			if(strtolower($ad_group) == strtolower($group)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
+	/**
+	 * Returns the users that are part of the given group
+	 *
+	 * @param string $group 
+	 * @return multitype:string
+	 * @author Ben Evans
+	 */
 	public static function getUsersFromGroup( $group ) {
 		$adldap = Model_Auth_ActiveDirectory::load_module();
-		return $adldap->group_members($group);
+		return $adldap->group()->members($group);
 	}
+	
+	/**
+	 * Gets the groups that a given user is a member of
+	 *
+	 * @param string $username 
+	 * @return void
+	 * @author Ben Evans
+	 */
+	public static function getUserGroups( $username ) {
+		$adldap = Model_Auth_ActiveDirectory::load_module();
+		return $adldap->user()->groups($username, true);
+	}
+	
 	
 	/**
 	 * Returns Basic User Details
@@ -118,18 +151,37 @@ class Model_Auth_ActiveDirectory extends Model_Auth_General{
 			$vUser[0]['givenname'] = array("");
 		}
 		
-		return array( "last_name" => $vUser[0]['sn'][0], "first_name" => $vUser[0]['givenname'][0] );
+		$ad_groups = self::getUserGroups($username);
+		
+		return array( "last_name" => $vUser[0]['sn'][0], "first_name" => $vUser[0]['givenname'][0], "groups" => $ad_groups );
 	}
 	
-	private static function updateCache( $username, $last_name, $first_name ) {
+	
+	/**
+	 * Updates the Active Directory Database Cache for a given user
+	 *
+	 * @param string $username 
+	 * @param string $last_name 
+	 * @param string $first_name 
+	 * @return void
+	 * @author Ben Evans
+	 */
+	protected static function updateCache( $username, $last_name, $first_name ) {
 		$db = Zend_Registry::get("db");
 		$db->query("DELETE FROM ad_user_cache WHERE samaccountname = " . $db->quote($username) . " LIMIT 1");
 		$db->query("UPDATE ad_user_cache SET first_name = " . $db->quote($first_name) . ", last_name = " . $db->quote($last_name) . " WHERE samaccountname = " . $db->quote($username) . " LIMIT 1");
 	}
 	
+	/**
+	 * Updates the Active Directory Database Cache for a User
+	 *
+	 * @param string $username 
+	 * @return void
+	 * @author Ben Evans
+	 */
 	public static function updateUser( $username ) {
 		$adldap = Model_Auth_ActiveDirectory::load_module();
-		$vUser = $adldap->user_info($username, array("givenName", "sn"));	
+		$vUser = $adldap->user()->info( $username, array("givenName", "sn") );
 		$sn = "";
 		$fn = "";
 		
