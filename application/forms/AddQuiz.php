@@ -36,6 +36,7 @@ class Form_AddQuiz extends Zend_Form
 			->addFilter('StripTags')
 			->addFilter('StringTrim')
 			->addErrorMessage("Please Enter a Valid Quiz Name")
+			->setAttrib('placeholder', 'eg. Java Array Concepts')
 			->addValidator('NotEmpty');
 
 
@@ -45,6 +46,7 @@ class Form_AddQuiz extends Zend_Form
 			->setRequired(true)
 			->addFilter('StripTags')
 			->addFilter('StringTrim')
+			->setAttrib('placeholder', 'eg. comp115-students')
 			->addValidator('NotEmpty');
 		
 		
@@ -53,6 +55,7 @@ class Form_AddQuiz extends Zend_Form
 			->setRequired(true)
 			->addFilter('StripTags')
 			->addFilter('StringTrim')
+			->setAttrib('placeholder', 'eg. ' . date("Y-m-d") )
 			->addValidator('date');
 	
 		$close_date = new Zend_Form_Element_Text('closedate');
@@ -60,6 +63,7 @@ class Form_AddQuiz extends Zend_Form
 			->setRequired(true)
 			->addFilter('StripTags')
 			->addFilter('StringTrim')
+			->setAttrib('placeholder', 'eg. ' . date("Y-m-d", strtotime("today +1 week")) )
 			->addValidator('date');
 		
 
@@ -69,18 +73,20 @@ class Form_AddQuiz extends Zend_Form
 			->addFilter('StripTags')
 			->addFilter('StringTrim')
 			->addValidator('Int')
+			->setAttrib('placeholder', 'eg. 5' )
 			->addValidator($validatorPositive);
 			//->setErrors(array("Please Enter a Valid Number of Attempts (at least 1)"))
 
 
 		$percentage = new Zend_Form_Element_Text('percentage');
-        $percentage->setLabel('Pass Percentage (eg. 80)')
+        $percentage->setLabel('Pass Percentage')
 			->setRequired(true)
 			->addFilter('StripTags')
 			->addFilter('StringTrim')
 			->addValidator('Int')
 			->addValidator($validatorPositive)
-			->addValidator($validatorLessthan);
+			->addValidator($validatorLessthan)
+			->setAttrib('placeholder', 'eg. 80');
 			//->setErrors(array("Please input a number between 1 and 100"))
 
 
