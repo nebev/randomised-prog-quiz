@@ -20,7 +20,7 @@
 
 class Model_Shell_Compiler{
 	
-	const NIX_OSES = "linux,darwin";
+	const NIX_OSES = "linux,darwin,unix,bsd";
 	
 	public static function compileAndReturn($vFilePrefix, $mSource){
 		$mTempFolder = Model_Shell_Compiler::os_slash(APPLICATION_PATH . "/../tmp");
@@ -45,20 +45,32 @@ class Model_Shell_Compiler{
 	 */
 	private static function java_compile_and_return($mTempFolder, $vFilePrefix, $mSource) {
 		
+		Model_Shell_Debug::getInstance()->log("Entering Java Compilation");
+		Model_Shell_Debug::getInstance()->log("Temporary Folder Given: $mTempFolder . File Prefix: $vFilePrefix");
+		Model_Shell_Debug::getInstance()->log("Source passed was:\n$mSource");
+		
 		if(in_array(strtolower(PHP_OS), explode(",", self::NIX_OSES) )){
 			
 			// Clean up any old existing files
 			if(file_exists(   Model_Shell_Compiler::os_slash("$mTempFolder/".$vFilePrefix.".java")  )){
+				Model_Shell_Debug::getInstance()->log("Existing file exists. Removing");
 				unlink(  Model_Shell_Compiler::os_slash("$mTempFolder/".$vFilePrefix.".java")  );
 			}
 			if(file_exists(  Model_Shell_Compiler::os_slash("$mTempFolder/".$vFilePrefix) ) ){
+				Model_Shell_Debug::getInstance()->log("Existing folder exists. Removing");
 				unlink(  Model_Shell_Compiler::os_slash("$mTempFolder/".$vFilePrefix) );
 			}
+		
+			$mTempFolder = self::os_slash( $mTempFolder );
 		
 			// Output the program that's been generated into a File.
 			$fh = fopen( Model_Shell_Compiler::os_slash("$mTempFolder/".$vFilePrefix.".java")  , 'w');
 	        fwrite($fh,$mSource);
 	        fclose($fh);
+			
+			if(!is_writable($mTempFolder)) {
+				throw new Exception("Cannot write to $mTempFolder Please ensure permissions are correctly set");
+			}
 			
 			// Java sometimes generates more than one class... so we put the compiled things in a directory
 			mkdir( $mTempFolder . "/" . $vFilePrefix );
@@ -66,7 +78,9 @@ class Model_Shell_Compiler{
 			
 			// Run the program that we outputted to a file into a fully functioning Executable
 			$toExec = "javac \"" . $mTempFolder . "/".$vFilePrefix.".java\" -d \"" . $mTempFolder . "/" . $vFilePrefix . "\"";
+			Model_Shell_Debug::getInstance()->log("Attempted to execute: $toExec");
 			$execResult = exec($toExec);
+			Model_Shell_Debug::getInstance()->log("Execution result was: " . $execResult);
 
 			// OK Now we need to see what classes have been generated in this directory, and then call that when executing
 			$directory_contents = scandir( $mTempFolder . "/" . $vFilePrefix );
@@ -84,10 +98,21 @@ class Model_Shell_Compiler{
 			
 			if( !is_null($program_to_run) ){
 
-				$toExec = "timeout 5 java -cp \"" . $mTempFolder . "/" . $vFilePrefix . "\" " . $program_to_run . " > \"" . $mTempFolder . "/" . $vFilePrefix . ".txt\"";
-				exec($toExec);	
+				// Most linuxes and Unixes come with the GNU timeout program. However, OSX doesn't
+				if(in_array(strtolower(PHP_OS), array('darwin'))){
+					$toExec = realpath( APPLICATION_PATH . "/../resources/osx_timeout.sh" ) . " 5 java -cp \"" . $mTempFolder . "/" . $vFilePrefix . "\" " . $program_to_run . " > \"" . $mTempFolder . "/" . $vFilePrefix . ".txt\"";
+				}else{
+					$toExec = "timeout 5 java -cp \"" . $mTempFolder . "/" . $vFilePrefix . "\" " . $program_to_run . " > \"" . $mTempFolder . "/" . $vFilePrefix . ".txt\"";
+				}
 
+				
+				$execution_result = exec($toExec);
+				
+				Model_Shell_Debug::getInstance()->log("Java program compiled. Now executing: " . $toExec);
+				// Model_Shell_Debug::getInstance()->log("The shell Execution result (not expecting anything) was: " . $execution_result);
+				
 				$vContents = file_get_contents( Model_Shell_Compiler::os_slash( "$mTempFolder/".$vFilePrefix.".txt" ) );
+				Model_Shell_Debug::getInstance()->log("File Execution result was: " . trim($vContents) );
 
 				//Delete all the stuff we made
 				unlink("$mTempFolder/".$vFilePrefix.".java");
@@ -193,9 +218,11 @@ class Model_Shell_Compiler{
 	 * @return string
 	 * @author Ben Evans
 	 */
-	private static function cpp_compile_and_return($mTempFolder, $vFilePrefix, $mSource) {
-		
-		if(strtolower(PHP_OS)=="linux"){
+	protected static function cpp_compile_and_return($mTempFolder, $vFilePrefix, $mSource) {
+				
+		if(in_array(strtolower(PHP_OS), explode(",", self::NIX_OSES) )){
+			// Linux, Mac etc
+			
 			if(file_exists(   Model_Shell_Compiler::os_slash("$mTempFolder/".$vFilePrefix.".cpp")  )){
 				unlink(  Model_Shell_Compiler::os_slash("$mTempFolder/".$vFilePrefix.".cpp")  );
 			}
@@ -319,7 +346,7 @@ class Model_Shell_Compiler{
 		}
 		
 		
-		if(in_array(strtolower(PHP_OS), array("linux", "unix", "mac osx", "bsd"))){
+		if(in_array(strtolower(PHP_OS), explode(",", self::NIX_OSES) )){
 			return str_replace("\\", "/", $file_path);
 		}else{
 			return str_replace("/", "\\", $file_path);

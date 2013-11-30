@@ -32,6 +32,7 @@
 		
 		
 		public function __construct($vFileName){
+			Model_Shell_Debug::getInstance()->log("Attempting to create generic question from XML File $vFileName");
 			$this->mFileContents = Model_XML_Parser::xml2array($vFileName);
 			$this->mFileName = $vFileName;
 			$this->mSubstitutions = array();
@@ -107,10 +108,13 @@
 			//Get the problem from the XML data
 			$this->mProblem = $this->mFileContents['question']['problem'];
 			
+			
 			//Replace what needs to be replaced
 			foreach($this->mSubstitutions as $mSubKey => $mSub){
 				$this->mProblem = str_replace("`".$mSubKey."`",$mSub,$this->mProblem);
 			}
+			
+			//Model_Shell_Debug::getInstance()->log("The Base Question problem (with substitutions) is: " . $this->mProblem);
 			
 			//Now, if it's a fill-in question, we need to take care of that. mProblemFill should be
 			//	populated with the inputboxes, while mProblem should be populated with OUR solution
@@ -134,6 +138,7 @@
 					- Evaluating the PHP code inside the <substitution> keys and saving the results to $mSubstitutions
 			*/
 			
+			Model_Shell_Debug::getInstance()->log("Populating ". sizeof($this->mFileContents['question']['substitutions']['substitution']) ."/2 Substitutions");
 			
 			//There's essentially 2x the amount of array keys in this array because the XML parser puts both the VALUE and ATTRIBUTE in
 			for($vCounter = 0; $vCounter<(sizeof($this->mFileContents['question']['substitutions']['substitution'])/2); $vCounter++ ){
@@ -187,6 +192,8 @@
 			if(isset($this->mActualAnswer)){
 				return $this->mActualAnswer;
 			}
+
+			Model_Shell_Debug::getInstance()->log("Attempting to generate correct answer for Question.");
 
 			$this->mActualAnswer = Model_Shell_Compiler::compileAndReturn(time() . rand(1,99999),$this->mProblem);
 			$this->mSubstitutions['ans'] = $this->mActualAnswer;

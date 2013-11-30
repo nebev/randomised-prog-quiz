@@ -56,6 +56,7 @@ class ShellController extends Zend_Controller_Action{
 	public function attemptAction() {
 		
 		$debug = true;
+		Model_Shell_Debug::getInstance()->log("User Entered the Attempt Action");
 		
 		$identity = Zend_Auth::getInstance()->getIdentity();
 		$username = $identity->username;
@@ -176,7 +177,7 @@ class ShellController extends Zend_Controller_Action{
 					while($vCounter<3){
 						
 						if( $debug ) {
-							echo "Generating... from " . $vQuestionBase->getXml() . "\n";
+							Model_Shell_Debug::getInstance()->log("Generating... from " . $vQuestionBase->getXml());
 						}
 						
 						$vGen = Model_Quiz_GeneratedQuestion::fromQuestionBase($vQuestionBase);

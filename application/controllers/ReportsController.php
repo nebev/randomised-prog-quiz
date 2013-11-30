@@ -153,19 +153,28 @@
 		 * Shows the Question Analysis
 		 */
 		public function questionanalysisAction() {
-			$filename = $this->_getParam("file");
-			$this->view->file = $filename;
+			$file_id = $this->_getParam("file");
+			$this->view->file = $file_id;
+			
+			// Pointless line to load all the other functions in the GeneratedQuestion File
+			// TODO: Fix this PLEASE
+			$tmp = new Model_Quiz_GeneratedQuestion();
+			
 			
 			// Get All Question Bases
 			$this->view->all_question_bases = Model_Quiz_QuestionBase::getAll();
 			
-			if( !is_null($filename) && isset($filename) ) {
-				$question_base = Model_Quiz_QuestionBase::fromID( $filename );
+			if( is_null($file_id) || !isset($file_id) ) {
+				$default_question_base = current( $this->view->all_question_bases );
+				$file_id = $default_question_base->getID();
+			}
+			
+			if( !is_null($file_id) && isset($file_id) ) {
+				$question_base = Model_Quiz_QuestionBase::fromID( $file_id );
 				$attempts = Model_Quiz_QuestionAttempt::getAllFromQuestionBase($question_base);
 				
 				// Generate a sample question
 				$sample_question = new Model_Shell_GenericQuestion(APPLICATION_PATH . "/../xml/questions/" . $question_base->getXml());
-				
 				
 				$this->view->question_base = $question_base;
 				$this->view->attempts = $attempts;

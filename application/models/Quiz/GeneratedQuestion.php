@@ -83,14 +83,32 @@ class Model_Quiz_GeneratedQuestion
 		return $vReturn;		//Return the result
 	}
 	
-
+	/**
+	 * Writes a brand new Question to the database
+	 *
+	 * @param ? $instructions 
+	 * @param ? $question_data 
+	 * @param ? $correct_answer 
+	 * @param ? $vQuestion 
+	 * @return null|Model_Quiz_GeneratedQuestion
+	 */
 	public static function fromScratch($instructions,$question_data,$correct_answer,$vQuestion){
+		
+		Model_Shell_Debug::getInstance()->log("Writing question to the database");
+		
 		$db = Zend_Registry::get("db");
 		$sql = "INSERT INTO generated_questions(generated_id,instructions,question_data,correct_answer,question_basequestion_id) VALUES(NULL, ".$db->quote($instructions).",".$db->quote($question_data).",".$db->quote($correct_answer).",".$db->quote($vQuestion->getID()).")";
+		Model_Shell_Debug::getInstance()->log($sql);
+		$db->beginTransaction();
 		$db->query($sql);
 		
 		//Now find the appropriate entry in the database
 		//	A safe (default) assumption for this is a query that looks for everything you just put in.
+		
+		$last_id = $db->lastInsertId();
+		$db->commit();
+		return Model_Quiz_GeneratedQuestion::fromID($last_id);
+		
 		
 		$sql = "SELECT generated_id FROM generated_questions WHERE instructions=".$db->quote($instructions)." AND question_data=".$db->quote($question_data)." AND correct_answer=".$db->quote($correct_answer)." AND question_basequestion_id=".$db->quote($vQuestion->getID());
 		$result = $db->query($sql);
@@ -107,9 +125,11 @@ class Model_Quiz_GeneratedQuestion
 		$db = Zend_Registry::get("db");
 		
 		//Firstly see if there's any 'spare' Model_Quiz_GeneratedQuestions
+		Model_Shell_Debug::getInstance()->log("Seeing if there are any Pregenerated Questions for Question Identifier " . $vQB->getID());
 		$result = $db->query("SELECT generated_id FROM generated_questions WHERE question_basequestion_id=".$db->quote($vQB->getID())." AND generated_id NOT IN(SELECT generated_questionsgenerated_id AS generated_id FROM question_attempt)");
 		$row = $result->fetch();
 		if($row['generated_id']!=null){
+			Model_Shell_Debug::getInstance()->log("Found PreGenerated Question with Generated Identifier " . $row['generated_id']);
 			return Model_Quiz_GeneratedQuestion::fromID($row['generated_id']);
 		}
 		
@@ -120,7 +140,7 @@ class Model_Quiz_GeneratedQuestion
 			$vQuestion = new Model_Shell_GenericQuestion(APPLICATION_PATH . "/../xml/questions/" . $vQB->getXml());
 		}
 		
-		$vGenerated = Model_Quiz_GeneratedQuestion::fromScratch($vQuestion->getInstructions(), $vQuestion->getProblem(), $vQuestion->getCorrectOutput(), $vQB);
+		$vGenerated = self::fromScratch($vQuestion->getInstructions(), $vQuestion->getProblem(), $vQuestion->getCorrectOutput(), $vQB);
 		
 		//Add multiple choice alternatives if specified
 		$vAltAnswers = $vQuestion->getAnswers();

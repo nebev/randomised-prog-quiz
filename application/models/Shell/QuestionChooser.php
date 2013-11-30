@@ -77,16 +77,9 @@ class Model_Shell_QuestionChooser{
 		//Foreach concept tested, see how many questions we've attempted
 		foreach($vTestedConcepts as $vTestedConcept){
 			
-			if( $debug ) {
-				echo "Looking at TestedConcept: " . $vTestedConcept->getConcept()->getConcept_name() . ".\n";
-			}
-			
-	
+			Model_Shell_Debug::getInstance()->log("Looking at TestedConcept: " . $vTestedConcept->getConcept()->getConcept_name());
 			$vQuestionAttempts = Model_Quiz_QuestionAttempt::getAllFromQuizAttemptAndConcept($vQuizAttempt, $vTestedConcept->getConcept());
-
-			if( $debug ) {
-				echo "Done " . sizeof($vQuestionAttempts) ."/". $vTestedConcept->getNumber_tested().".\n";
-			}
+			Model_Shell_Debug::getInstance()->log("Done " . sizeof($vQuestionAttempts) ."/". $vTestedConcept->getNumber_tested());
 			
 		
 			//If we haven't attempted enough in this concept, we need to choose a question difficulty

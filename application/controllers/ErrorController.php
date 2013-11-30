@@ -44,6 +44,10 @@ class ErrorController extends Zend_Controller_Action
             $log->crit($this->view->message, $errors->exception);
         }
         
+		// Log to file if we can
+		Model_Shell_Debug::getInstance()->log("Exception Occured: " . $errors->exception->getMessage() . "\n" . $errors->exception->getTraceAsString());
+		Model_Shell_Debug::getInstance()->saveToDisk();
+		
         // conditionally display exceptions
         if ($this->getInvokeArg('displayExceptions') == true) {
             $this->view->exception = $errors->exception;

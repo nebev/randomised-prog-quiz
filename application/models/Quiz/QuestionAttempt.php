@@ -205,7 +205,14 @@ class Model_Quiz_QuestionAttempt
 		return $vReturn;
 	}
 
-	public static function getAllFromQuestionBase($vQB){
+	/**
+	 * Gets all Question attempts for a given question
+	 *
+	 * @param string $vQB 
+	 * @return void
+	 * @author Ben Evans
+	 */
+	public static function getAllFromQuestionBase(Model_Quiz_QuestionBase $vQB){
 		$db = Zend_Registry::get("db");
 		$vReturn = array();
 		$sql = "SELECT attempt_id FROM question_attempt WHERE question_basequestion_id=".$db->quote($vQB->getID());
