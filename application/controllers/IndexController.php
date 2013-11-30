@@ -260,8 +260,12 @@ class IndexController extends Zend_Controller_Action {
 		if( isset($selected_xml) && !is_null($selected_xml) ) {
 			
 			// Get the Question XML
-			$mQuestion = new Model_Shell_GenericQuestion($xml_path . "/" . $selected_xml .".xml");
-			$this->view->question = $mQuestion;
+			try{
+				$mQuestion = new Model_Shell_GenericQuestion($xml_path . "/" . $selected_xml .".xml");
+				$this->view->question = $mQuestion;
+			} catch (Exception $e) {
+				
+			}
 			
 			// Just make a new random question, so we get access to functions like Randset
 			$temp = new Model_Quiz_GeneratedQuestion();

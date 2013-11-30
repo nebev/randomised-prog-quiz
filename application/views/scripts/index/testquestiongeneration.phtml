@@ -16,45 +16,120 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-?><form action="" method="GET">
-	<select name="q">	
-<?php
-		foreach( $this->available_selects as $ae ) {
-			echo $ae;
-		}
-?>
-	</select>
-	<input type="submit" value="Change" />
-<?php
+?><!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Test Question Generation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="<?php echo $this->baseUrl(); ?>/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="<?php echo $this->baseUrl(); ?>/assets/js/highlight/styles/idea.css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript" src="<?php echo $this->baseUrl(); ?>/assets/js/highlight/highlight.pack.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+		  $('pre').each(function(i, e) {hljs.highlightBlock(e)});
+		});
+	</script>
+  </head>
 
-	if( isset($this->question) ) {
+<body>
+	
+	<div class="container">
+	
+	<!-- Header -->
+	<div class="row">
+    	<div class="col-lg-12">
+        	<div class="page-header">
+            	<h1 id="type">Test Question Generation</h1>
+          </div>
+       	</div>
+    </div>
+
+
+	<!-- The Selection Form -->
+	<div class="row">
+    	<div class="col-lg-12">
+			<h3>Select an XML File to Test</h3>
+        	<div class="well">
+
+				<form action="" method="GET">
+					<select name="q">	
+				<?php
+						foreach( $this->available_selects as $ae ) {
+							echo $ae;
+						}
+				?>
+					</select>
+					<input type="submit" value="Change" />
+				</form>
+          </div>
+       	</div>
+    </div>
+	
+	
+	
+	
+
+	
+<?php if( isset($this->question) ) : ?>
+
+	<!-- Question information -->
+	<div class="row">
+    	<div class="col-lg-12">
+			<h3>Question Information</h3>
+
 		
-		$mQuestion = $this->question;
 		
-		echo "Question Type: " . $mQuestion->getFriendlyType() . "<br/>\n";
-		echo "Question Concepts: ";
-			foreach($mQuestion->getConcepts() as $vConcept){
-				echo $vConcept . " ";
+		
+			<?php	$mQuestion = $this->question; ?>
+			<table>
+				<tr>
+					<th>Question Type</th>
+					<td><?php echo $mQuestion->getFriendlyType(); ?></td>
+				</tr>
+				<tr>
+					<th>Question Concepts</th>
+					<td><?php foreach($mQuestion->getConcepts() as $vConcept){ echo $vConcept . " ";} ?></td>
+				</tr>
+				<tr>
+					<th>Difficulty</th>
+					<td><?php echo $mQuestion->getDifficulty(); ?></td>
+				</tr>
+				<tr>
+					<th>Instructions</th>
+					<td><?php try{ echo $mQuestion->getInstructions(); }catch(Exception $e) { echo "Unavaliable as question didn't compile"; } ?></td>
+				</tr>
+			</table>
+		</div>
+	</div> <!-- End Row -->
+	
+
+	<div class="row">
+    	<div class="col-lg-12">
+			
+<?php	try{
+
+		
+			$problem = $mQuestion->getProblem();
+			$exploded_problem = explode("\n", $problem);
+			$new_problem = array();
+			foreach( $exploded_problem as $ep ) {
+				if( strpos($ep, "//HIDE") === false ) {
+					$new_problem[] = $ep;
+				}
 			}
-
-		echo "<br/>\nDifficulty: " . $mQuestion->getDifficulty();
-		echo "<br/>\nInstructions: " . $mQuestion->getInstructions();
+			$problem = implode("\n", $new_problem);
 		
-		$problem = $mQuestion->getProblem();
-		$exploded_problem = explode("\n", $problem);
-		$new_problem = array();
-		foreach( $exploded_problem as $ep ) {
-			if( strpos($ep, "//HIDE") === false ) {
-				$new_problem[] = $ep;
-			}
+			echo "<h3>Problem</h3>";
+			echo "<pre>" . str_replace("<","&lt;",str_replace(">","&gt;", $problem )) . "</pre>\n";
+
+			echo "<h3>Solution</h3>";
+			echo "Actual Output: <pre>" . $mQuestion->getCorrectOutput() . "</pre>";
+		}catch(Exception $e) {
+			echo "<p>An error occured getting the correct output.</p><p>The log leading up to the exception is listed below</p>";
+			echo "<pre>" . Model_Shell_Debug::getInstance()->getLog() . "\n\n" . $e->getMessage() . "\n" .$e->getTraceAsString() . "</pre>";
 		}
-		$problem = implode("\n", $new_problem);
-		
-		
-		echo "<br/>\n<pre>" . str_replace("<","&lt;",str_replace(">","&gt;", $problem )) . "</pre>\n";
-
-
-		echo "Actual Output: <pre>" . $mQuestion->getCorrectOutput() . "</pre>";
 
 
 		if($mQuestion->getFriendlyType()=="multiple"){
@@ -70,14 +145,12 @@
 			echo "Your complete solution specified: <pre>".$mQuestion->getDebugProblem()."</pre>\n";
 		}
 		
-		
-		
-	}else{
-		echo "<p>Please Select an XML from Above</p>\n";
-	}
-
+	endif;
 
 ?>
-	
-	
-</form>
+		</div>
+	</div><!-- End Row -->
+
+	</div><!-- End Container -->
+</body>
+</html>

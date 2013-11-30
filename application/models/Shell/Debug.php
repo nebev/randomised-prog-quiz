@@ -1,7 +1,7 @@
 <?php
 /**
  *  Randomised Programming Quiz System - A quiz system that develops random programming questions from defined templates
- *  Copyright (C) 2010-2012 Ben Evans <ben@nebev.net>
+ *  Copyright (C) 2010-2013 Ben Evans <ben@nebev.net>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,11 @@ class Model_Shell_Debug {
 		$this->log_contents = "";
 	}
 	
-	
+	/**
+	 * Get the instance of the debug class
+	 *
+	 * @return Model_Shell_Debug
+	 */
 	public static function getInstance() {
 		if( is_null(self::$instance) ) {
 			self::$instance = new self();
@@ -51,6 +55,12 @@ class Model_Shell_Debug {
 		return self::$instance;
 	}
 	
+	/**
+	 * Add the text to the log
+	 *
+	 * @param string $text 
+	 * @return void
+	 */
 	public function log($text) {
 		$backtrace = debug_backtrace();
 
@@ -63,11 +73,26 @@ class Model_Shell_Debug {
 		$this->log_contents .= date("Y-m-d H:i:s") . " - " . $text . "\n";
 	}
 	
+	/**
+	 * Writes the log to disk
+	 *
+	 * @return void
+	 */
 	public function saveToDisk() {
 		$file_path = realpath(APPLICATION_PATH . "/../tmp");
 		if( is_writable($file_path) && strlen($this->log_contents) > 0 ) {
 			file_put_contents($file_path . DIRECTORY_SEPARATOR . $this->filename, $this->log_contents);
 		}
 	}
+	
+	/**
+	 * Gets the log contents as a string
+	 *
+	 * @return string
+	 */
+	public function getLog() {
+		return $this->log_contents;
+	}
+	
 	
 }
