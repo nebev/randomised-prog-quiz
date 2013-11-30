@@ -97,7 +97,8 @@ class Model_Quiz_Concept
 	public function getID(){ return $this->concept_name; }
 
 	public function getConcept_name(){	return $this->concept_name;}
-
+	public function getName() { return $this->getConcept_name(); }
+	
 	// **********************
 	// SETTER METHODS (GENERIC)
 	// **********************
@@ -110,6 +111,10 @@ class Model_Quiz_Concept
 		$db->query($sql);
 	}
 	
+	/**
+	 * Gets all quiz concepts in the database
+	 * @return multitype:Model_Quiz_Concept
+	 */
 	public static function getAll(){
 		$db = Zend_Registry::get("db");
 		$vReturn = array();

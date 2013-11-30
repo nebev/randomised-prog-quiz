@@ -35,8 +35,7 @@
 // CLASS DECLARATION (GENERIC)
 // **********************
 
-class Model_Quiz_TestedConcept
-{
+class Model_Quiz_TestedConcept {
 	
 	// **********************
 	// ATTRIBUTE DECLARATION (GENERIC)
@@ -107,7 +106,50 @@ class Model_Quiz_TestedConcept
 	public function getConcept(){	return Model_Quiz_Concept::fromID($this->conceptsconcept_name);}
 	public function getQuiz(){	return Model_Quiz_Quiz::fromID($this->quizquiz_id);}
 
-
+	/**
+	 * Update the Concept tested to that of the object passed
+	 * @param Model_Quiz_Concept $concept
+	 */
+	public function updateConcept( Model_Quiz_Concept $concept ) {
+		$this->updateField("conceptsconcept_name", $concept->getName());	// NAME? REALLY? NAME?
+	}
+	
+	/**
+	 * Updates the lower difficulty for this Tested Concept
+	 * @param int $lower_difficulty
+	 */
+	public function updateLowerDifficulty($lower_difficulty) {
+		$this->updateField("lower_difficulty", intval($lower_difficulty));
+	}
+	
+	/**
+	 * Updates the higher difficulty for this Tested Concept
+	 * @param int $higher_difficulty
+	 */
+	public function updateHigherDifficulty($higher_difficulty) {
+		$this->updateField("higher_difficulty", intval($higher_difficulty));
+	}
+	
+	/**
+	 * Updates the Number of questions to be tested
+	 * @param int $number_tested
+	 */
+	public function updateNumberTested( $number_tested ) {
+		$this->updateField("number_tested", intval($number_tested));
+	}
+	
+	
+	/**
+	 * Update a Database Field for the specified Row to the value provided
+	 * @param string $field
+	 * @param string $value
+	 */
+	protected function updateField( $field, $value ) {
+		$db = Zend_Registry::get("db");	// Really should be using DI
+		/* @var $db Zend_Db_Adapter_Abstract */
+		$db->update("concepts_tested", array($field => $value), "ctest_id = " . $db->quote($this->getID()));
+	}
+	
 
 	// **********************
 	// OTHER METHODS (SPECIFIC)

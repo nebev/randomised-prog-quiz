@@ -176,44 +176,64 @@ class AdminController extends Zend_Controller_Action {
 		
 		$quiz = Model_Quiz_Quiz::fromID($quiz_id);
 		$this->view->quiz = $quiz;
-
 		$this->view->concepts = Model_Quiz_Concept::getAll();
 	}
 
-
+	
 	/**
-	 * Add a Concept (Migrated Code Essentially)
+	 * Allows Adding and Editing a TestedConcept to a quiz
+	 * Expects [quiz_id] as a parameter if no [tested_concept] (id) is passed
 	 */
 	public function addconceptAction() {
+		$form = new Form_AddQuizConcept();
+		$quiz_id = $this->_getParam("quiz_id");
+		$tested_concept = $this->_getParam("tested_concept");
 		
-		$vQuiz = $this->_getParam("id");
-		$vQuiz = Model_Quiz_Quiz::fromID($vQuiz);
-		
-		/*	Process the ADD CONCEPT TO QUIZ Form */
-		/*	Start by checking for errors */
-
-		$vError = array();
-		if($_POST['num']==null)
-			$vError[] = "Num of questions was left blank";
-		if($_POST['concept']==null)
-			$vError[] = "Concept was left blank (how did you do that?)";
-		if($_POST['from']==null)
-			$vError[] = "Difficulty(From) was left blank";
-		if($_POST['to']==null)
-			$vError[] = "Difficulty (to) was left blank";
-
-		if(sizeof($vError) == 0){
+		if( is_numeric($tested_concept) ) {
+			$tested_concept_ob = Model_Quiz_TestedConcept::fromID( intval($tested_concept) );
+			if( is_null($tested_concept_ob) ) { throw new Exception("Invalid Tested Concept Identifier"); }
+			$form->getElement("submit")->setLabel("Edit Tested Concept");
+			$this->view->action_text = "Edit";
+			$form->populateFromConcept($tested_concept_ob);
 			
-			/*	Assuming everything is ok... */
-			$vConcept = Model_Quiz_Concept::fromID($_POST['concept']);
-			$vTestedConcept = Model_Quiz_TestedConcept::fromScratch($_POST['from'],$_POST['to'],$_POST['num'],$vConcept,$vQuiz);
+		}elseif( is_numeric($quiz_id) ) {
+			$quiz_ob = Model_Quiz_Quiz::fromID( intval($quiz_id) );
+			if( is_null($quiz_ob) ) { throw new Exception("Invalid Quiz Identifier"); }
+			$this->view->action_text = "Add";
+		}else{
+			throw new Exception("No quiz identifier or tested concept identifier passed");
 		}
 		
-		//Redirect to the concept page
-		$params = array('id' => $_REQUEST['id']);
-		$this->_helper->redirector("showconcepts", "admin", null, $params);
+		
+		if( $this->getRequest()->isPost() ) {
+			$formdata = $this->getRequest()->getPost();
+			if( $form->isValid($formdata) ) {
+				
+				// Either update the existing tested concept or add a new one
+				if( isset($tested_concept_ob) ) {
+					$vConcept = Model_Quiz_Concept::fromID( $formdata['concept_id'] );
+					$tested_concept_ob->updateConcept($vConcept);
+					$tested_concept_ob->updateLowerDifficulty( $formdata['difficulty_from'] );
+					$tested_concept_ob->updateHigherDifficulty( $formdata['difficulty_to'] );
+					$tested_concept_ob->updateNumberTested( $formdata['number_of_questions'] );
+					$params = array( 'id' => $tested_concept_ob->getQuiz()->getID() );
+				}else{
+					$vConcept = Model_Quiz_Concept::fromID( $formdata['concept_id'] );
+					$vTestedConcept = Model_Quiz_TestedConcept::fromScratch($formdata['difficulty_from'], $formdata['difficulty_to'], $formdata['number_of_questions'], $vConcept, $quiz_ob);
+					$params = array('id' => $quiz_ob->getID());
+				}
+				
+				$this->_helper->redirector("showconcepts", "admin", null, $params);
+				
+			}else{
+				$form->populate($formdata);
+			}
+		}
+		
+		$this->view->form = $form;
 	}
 
+	
 
 	/**
 	 * Deletes a Concept
