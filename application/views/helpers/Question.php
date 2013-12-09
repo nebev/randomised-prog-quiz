@@ -35,7 +35,7 @@
 			for( $i = 0; $i < sizeof($rows); $i++ ) {
 				$rows[$i] = str_replace("<","&lt;",str_replace(">","&gt;", $rows[$i] ) );
 				
-				if( strpos($rows[$i], "//HIDE") === false && strlen( str_replace("\t", "", $rows[$i]) ) > 2 ) {
+				if( strpos($rows[$i], "//HIDE") === false && strlen( str_replace("\t", "", $rows[$i]) ) >= 1 ) {
 			
 					$exploded_line = explode("////", $rows[$i]);
 					if( sizeof($exploded_line) > 1 ) {
