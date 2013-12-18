@@ -96,7 +96,8 @@ DROP TABLE IF EXISTS `quiz`;
 CREATE TABLE `quiz` (
   `quiz_id` int(10) NOT NULL AUTO_INCREMENT,
   `quiz_name` varchar(20) COLLATE latin1_general_ci NOT NULL,
-  `permissions_group` varchar(25) COLLATE latin1_general_ci NOT NULL,
+  -- Arun updated this from varchar(25) to varchar(250)
+  `permissions_group` varchar(250) COLLATE latin1_general_ci NOT NULL,
   `open_date` datetime NOT NULL,
   `close_date` datetime NOT NULL,
   `max_attempts` int(2) NOT NULL,

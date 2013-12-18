@@ -69,6 +69,8 @@ class AdminController extends Zend_Controller_Action {
 	 */
 	public function manageAction() {
 		 $this->view->quizzes = Model_Quiz_Quiz::getAll();
+		 $this->view->loadtime = Model_Quiz_Quiz::getZeProfiler();
+
 	}
 
 

@@ -175,6 +175,11 @@ class Model_Quiz_Quiz
 		return $vReturn;
 	}
 
+	public static function getZeProfiler() {
+		$db = Zend_Registry::get("db");
+		return $db->getProfiler();
+	}
+
 	public function getTestedConcepts(){
 		$db = Zend_Registry::get("db");
 		$vReturn = array();
