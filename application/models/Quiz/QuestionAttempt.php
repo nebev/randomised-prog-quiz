@@ -83,7 +83,15 @@ class Model_Quiz_QuestionAttempt
 		return $vReturn;		//Return the result
 	}
 	
-
+	/**
+	 * Creates a new Question Attempt from the parameters passed
+	 * @param Model_Quiz_QuestionBase $vQuestionBase
+	 * @param int $attempted_on UNIX Timestamp Int
+	 * @param int $time_started UNIX Timestamp Int
+	 * @param Model_Quiz_QuizAttempt $vQuizAttempt
+	 * @param Model_Quiz_GeneratedQuestion $vGeneratedQuestion
+	 * @return Model_Quiz_QuestionAttempt|NULL
+	 */
 	public static function fromScratch($vQuestionBase,$attempted_on,$time_started,$vQuizAttempt,$vGeneratedQuestion){
 		$db = Zend_Registry::get("db");
 		$sql = "INSERT INTO question_attempt(attempt_id,question_basequestion_id,attempted_on,time_started,quiz_attemptquiz_attempt_id,generated_questionsgenerated_id) VALUES(NULL, ".$db->quote($vQuestionBase->getID()).",'".date("Y-m-d H:i:s",$attempted_on)."','".date("Y-m-d H:i:s",$time_started)."',".$db->quote($vQuizAttempt->getID()).",".$db->quote($vGeneratedQuestion->getID()).")";
@@ -115,7 +123,9 @@ class Model_Quiz_QuestionAttempt
 	public function getTime_started(){	return $this->time_started;}
 	public function getTime_finished(){	return $this->time_finished;}
 	public function getQuiz_attemptquiz_attempt_id(){	return $this->quiz_attemptquiz_attempt_id;}
-	public function getGeneratedQuestion(){	return $this->generated_questionsgenerated_id;}
+	public function getGeneratedQuestion(){	
+		return $this->generated_questionsgenerated_id; // DECEIVING NAME! This is actually a Model_Quiz_GeneratedQuestion Object!
+	}
 
 	// **********************
 	// SETTER METHODS (GENERIC)
@@ -227,6 +237,28 @@ class Model_Quiz_QuestionAttempt
 	}
 
 
+	/**
+	 * Sometimes question attempts are rendered invalid due to a database change.
+	 * This will just ensure that the generated question specified EXISTS and can be loaded
+	 * If everything is OK (99.9% of cases), TRUE is returned
+	 * @return boolean
+	 */
+	public function isValid() {
+		return !is_null( $this->getGeneratedQuestion() );
+	}
+	
+	/**
+	 * Removes the instance of this QuestionAttempt from the Database
+	 * Shouldn't really need to do this under normal circumstances
+	 * @return void
+	 */
+	public function destroy() {
+		$db = Zend_Registry::get("db"); /* @var $db Zend_Db_Adapter_Abstract */
+		$db->delete("question_attempt", "attempt_id = " . $db->quote($this->getID()));
+	}
+	
+	
+	
 
 } // class Model_Quiz_QuestionAttempt : end
 

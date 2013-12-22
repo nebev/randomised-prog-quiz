@@ -121,7 +121,7 @@ class Model_Quiz_GeneratedQuestion
 	}
 	
 	/**
-	 * Generates a new Question from the Question Base object provided
+	 * Gets a new Question from the Question Base object provided
 	 * @param Model_Quiz_QuestionBase $vQB
 	 * @return Model_Quiz_GeneratedQuestion NULL if not defined
 	 */
@@ -136,45 +136,100 @@ class Model_Quiz_GeneratedQuestion
 			Model_Shell_Debug::getInstance()->log("Found PreGenerated Question with Generated Identifier " . $row['generated_id']);
 			return Model_Quiz_GeneratedQuestion::fromID($row['generated_id']);
 		}
+
+		return self::generateNewFromQuestionBase($vQB);	//Return a new generated question as there are no spares in the database
+	}
+	
+	/**
+	 * This will generate a brand new question from a question base.
+	 * Unlike fromQuestionBase(), this method will NOT consult the database for question first
+	 * @param Model_Quiz_QuestionBase $vQuestionBase
+	 * @return Model_Quiz_GeneratedQuestion
+	 */
+	public static function generateNewFromQuestionBase( Model_Quiz_QuestionBase $vQuestionBase ) {
 		
-		//There's no spares
-		if(strtolower(PHP_OS)=="linux"){
-			$vQuestion = new Model_Shell_GenericQuestion(APPLICATION_PATH . "/../xml/questions/" . $vQB->getXml());
-		}else{
-			$vQuestion = new Model_Shell_GenericQuestion(APPLICATION_PATH . "/../xml/questions/" . $vQB->getXml());
-		}
+		$vGenerated = null;
+		$error_threshold = 4;
+		$error_counter = 0;
 		
-		$vGenerated = self::fromScratch($vQuestion->getInstructions(), $vQuestion->getProblem(), $vQuestion->getCorrectOutput(), $vQB);
-		
-		//Add multiple choice alternatives if specified
-		$vAltAnswers = $vQuestion->getAnswers();
-		if(sizeof($vAltAnswers)>0){
-			shuffle($vAltAnswers);
-			$vNum=1;
-			foreach($vAltAnswers as $vAltAnswer){
-				
-				//Can't have more than 3 alternates
-				if($vNum>3){
-					break;
-				}
-				
-				if(is_array($vAltAnswer))
-					$vGenerated->addAlternateAnswer($vNum, $vAltAnswer[0], $vAltAnswer[1]);
-				else
-					$vGenerated->addAlternateAnswer($vNum, $vAltAnswer, "");
+		while( $error_counter <= $error_threshold && is_null($vGenerated) ) {
+
+			// Start by ensuring the Question is has instructions outputs etc etc
+			$vQuestion = new Model_Shell_GenericQuestion(APPLICATION_PATH . "/../xml/questions/" . $vQuestionBase->getXml());
+			$problem_string = $vQuestion->getProblem();
+			$question_output = $vQuestion->getCorrectOutput();
+			
+			// We need to make sure that the question has valid output
+			if( strlen(trim($question_output)) > 0 ) {
 					
-				$vNum++;
+				// If the question is multiple choice, we need to ensure that all answers are different
+				$alternate_answers = $vQuestion->getAnswers();
+				if( !is_null( $alternate_answers ) && sizeof( $alternate_answers ) > 0 ) {
+					shuffle($alternate_answers);
+			
+					// Now, we need to ensure that we have 3 different answers that are ALL different to the actual answer
+					$answer_set = array( trim($question_output) );	// Value is the answer
+					foreach( $alternate_answers as $aa_key => $alternate_answer ) {
+						if( is_array($alternate_answer) ) {
+							$alternate_answer = $alternate_answer[0];
+						}
+						$alternate_answer = trim( $alternate_answer );
+						if( in_array($alternate_answer, $answer_set) || strlen( trim($alternate_answer) ) == 0 ) {
+							unset($alternate_answers[$aa_key]);	// Answer already exists, or is blank (unusable)
+						}else{
+							$answer_set[] = $alternate_answer;
+						}
+					}
+			
+					if( sizeof($alternate_answers) >= 3 ) {
+							
+						// All is good. We can add this question, as well as all its alternate answers
+						$vGenerated = Model_Quiz_GeneratedQuestion::fromScratch($vQuestion->getInstructions(), $vQuestion->getProblem(), $vQuestion->getCorrectOutput(), $vQuestionBase);
+						$vNum = 1;
+						foreach($alternate_answers as $vAltAnswer){
+							if($vNum>3){
+								break; 	//Can't have more than 3 alternates
+							}
+								
+							if(is_array($vAltAnswer))
+								$vGenerated->addAlternateAnswer($vNum, $vAltAnswer[0], $vAltAnswer[1]);
+							else
+								$vGenerated->addAlternateAnswer($vNum, $vAltAnswer, "");
+								
+							$vNum++;
+						}
+						$question_counter++;
+			
+					}else{
+						$error_counter++;
+					}
+				}else {
+					// Not a multiple choice question
+					$vGenerated = Model_Quiz_GeneratedQuestion::fromScratch($vQuestion->getInstructions(), $vQuestion->getProblem(), $vQuestion->getCorrectOutput(), $vQuestionBase);
+				}
+					
+			}else{
+				$error_counter++;	// The question didn't return a result
 			}
 		}
+		
+		if( is_null($vGenerated) ) {
+			throw new Exception("Attempted to generate a question " . $error_threshold . "  times, but failed. Cannot continue");
+		}
+		
 		
 		//If the question is a fill-in question, put the whole solution in the 1st alternate answer column
 		if($vQuestion->getFriendlyType()=="fill-in"){
 			$vGenerated->setAlt_desc_1($vQuestion->getDebugProblem());
 		}
 		
-		
 		return $vGenerated;
 	}
+	
+	
+	
+	
+	
 	
 	
 

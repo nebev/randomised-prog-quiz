@@ -78,68 +78,7 @@ class CliController extends Zend_Controller_Action {
 		while( $question_counter <= $number_of_questions && $error_counter <= $maximum_errors ) {
 			
 			try{
-				$vQuestion = new Model_Shell_GenericQuestion(APPLICATION_PATH . "/../xml/questions/" . $vQuestionBase->getXml());
-				$problem_string = $vQuestion->getProblem();
-				$question_output = $vQuestion->getCorrectOutput();
-				
-				// We need to make sure that the question has valid output
-				if( strlen(trim($question_output)) > 0 ) {
-					
-					// If the question is multiple choice, we need to ensure that all answers are different
-					$alternate_answers = $vQuestion->getAnswers();
-					if( !is_null( $alternate_answers ) && sizeof( $alternate_answers ) > 0 ) {
-						shuffle($alternate_answers);
-						
-						// Now, we need to ensure that we have 3 different answers that are ALL different to the actual answer
-						$answer_set = array( trim($question_output) );	// Value is the answer
-						foreach( $alternate_answers as $aa_key => $alternate_answer ) {
-							if( is_array($alternate_answer) ) {
-								$alternate_answer = $alternate_answer[0];
-							}
-							$alternate_answer = trim( $alternate_answer );
-							if( in_array($alternate_answer, $answer_set) || strlen( trim($alternate_answer) ) == 0 ) {
-								unset($alternate_answers[$aa_key]);	// Answer already exists, or is blank (unusable)
-							}else{
-								$answer_set[] = $alternate_answer;
-							}
-						}
-						
-						if( sizeof($alternate_answers) >= 3 ) {
-							
-							// All is good. We can add this question, as well as all its alternate answers
-							$vGenerated = Model_Quiz_GeneratedQuestion::fromScratch($vQuestion->getInstructions(), $vQuestion->getProblem(), $vQuestion->getCorrectOutput(), $vQuestionBase);
-							$vNum = 1;
-							foreach($alternate_answers as $vAltAnswer){
-								if($vNum>3){
-									break; 	//Can't have more than 3 alternates
-								}
-							
-								if(is_array($vAltAnswer))
-									$vGenerated->addAlternateAnswer($vNum, $vAltAnswer[0], $vAltAnswer[1]);
-								else
-									$vGenerated->addAlternateAnswer($vNum, $vAltAnswer, "");
-									
-								$vNum++;
-							}
-							$question_counter++;
-
-						}else{
-							cronlog("There were not enough valid reponses for the multiple choice question generated.");
-							$error_counter++;
-						}
-						
-						
-					}else{
-						
-						// Not a multiple choice question
-						$vGenerated = Model_Quiz_GeneratedQuestion::fromScratch($vQuestion->getInstructions(), $vQuestion->getProblem(), $vQuestion->getCorrectOutput(), $vQuestionBase);
-						$question_counter++;
-							
-					}
-					
-				}else{
-					$error_counter++;
-				}
+				$vGeneratedQuestion = Model_Quiz_GeneratedQuestion::generateNewFromQuestionBase($vQuestionBase);
 			}catch(Exception $e) {
 				cronlog("Could not generate question. " . $e->getMessage() );
 				echo Model_Shell_Debug::getInstance()->getLog();

@@ -237,6 +237,10 @@ class Model_Quiz_QuizAttempt
 		return $vReturn;
 	}
 	
+	/**
+	 * Gets the last incomplete Question Attempt for this quiz
+	 * @return Model_Quiz_QuestionAttempt|NULL
+	 */
 	public function getLastIncompleteQuestion(){
 		$db = Zend_Registry::get("db");
 		$sql = "SELECT attempt_id FROM question_attempt WHERE time_finished IS NULL AND quiz_attemptquiz_attempt_id=".$db->quote($this->quiz_attempt_id)." ORDER BY attempt_id DESC";

@@ -63,6 +63,13 @@
 
 class Model_Shell_QuestionChooser{
 
+	/**
+	 * Selects the next question base appropriate for the quiz attempt passed
+	 * @param Model_Quiz_QuizAttempt $vQuizAttempt
+	 * @param boolean $debug Being Phased out TODO
+	 * @throws Exception
+	 * @return Model_Quiz_QuestionBase|NULL NULL Should only be returned in exceptional circumstances
+	 */
 	public static function select_next_question($vQuizAttempt, $debug = false){
 
 		//Get all the concepts this quiz tests
@@ -144,7 +151,7 @@ class Model_Shell_QuestionChooser{
 			
 				//Note, a divide by 0 happened here before...
 			
-				if($vTotalRight/$vTotal > 0.8){
+				if( $vTotal == 0 || $vTotalRight/$vTotal > 0.8){
 					//OK. If they WERE good attempts, I should move on if I've hit my quota for this difficulty
 					if($vTotal>=$mQuestionsPerDifficultyLevel){
 						//Reached our minumum quota for this difficulty level. NEXT!

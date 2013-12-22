@@ -54,9 +54,7 @@ class ShellController extends Zend_Controller_Action{
 	 * @author Ben Evans
 	 */
 	public function attemptAction() {
-		
-		//$debug = true;
-		$debug = false;
+
 		Model_Shell_Debug::getInstance()->log("User Entered the Attempt Action");
 		
 		$identity = Zend_Auth::getInstance()->getIdentity();
@@ -65,28 +63,20 @@ class ShellController extends Zend_Controller_Action{
 		
 	
 		/*	Before we do anything, test to make sure we've passed a VALID QUIZ which WE ARE ENTITLED to sit.	*/
-		if($_GET['quiz']==null && $_POST['quiz']==null){
+		$quiz_id = $this->_getParam( "quiz" );
+		if( is_null($quiz_id) ){
 			throw new Exception("No quiz was passed. Cannot continue.");
 		}
-			
-		if($_GET['quiz']!=null)
-			$vQuiz = Model_Quiz_Quiz::fromID($_GET['quiz']);
-		else	
-			$vQuiz = Model_Quiz_Quiz::fromID($_POST['quiz']);
-	
-		
+		$vQuiz = Model_Quiz_Quiz::fromID($quiz_id);
 		if($vQuiz==null){
 			throw new Exception("Quiz ID passed was invalid. Cannot continue.");
 		}
 	
-	
 		$mFinished = false;
 		$mMarking = false;
 	
-	
 		//Permissions
-		if($auth_model->userInGroup($username, $vQuiz->getPermissions_group()) && $vQuiz->getOpen_date()<=strtotime("now")){
-		
+		if($auth_model->userInGroup($username, $vQuiz->getPermissions_group()) && $vQuiz->getOpen_date()<=strtotime("now")){	
 		
 			//Have we run out of attempts?
 			$vAttempts = Model_Quiz_QuizAttempt::getAllFromUser($username, $vQuiz);
@@ -111,8 +101,6 @@ class ShellController extends Zend_Controller_Action{
 				
 			$vAttempts = Model_Quiz_QuizAttempt::getAllFromUser($username, $vQuiz);
 		}
-	
-
 
 
 		/*	Ok. We're allowed to TAKE the quiz. Are we resuming, or starting a new one? */
@@ -143,9 +131,13 @@ class ShellController extends Zend_Controller_Action{
 
 
 		/*	We have our quizAttempt ready to go. Now we look to see if we're resuming a question or not */
-	
 		$mQuestionAttempt = $mQuizAttempt->getLastIncompleteQuestion();
-		if( $mQuestionAttempt!=null || !is_object($mQuestionAttempt) ){
+		if(  is_object($mQuestionAttempt) &&  !$mQuestionAttempt->isValid() ) {
+			$mQuestionAttempt->destroy(); // Remove the Question attempt (Database was reinitialised or something)
+			$mQuestionAttempt = null;
+		}
+		
+		if( $mQuestionAttempt != null ){
 		
 			/*	Are we getting an ANSWER for this question? */
 			if(array_key_exists("marking", $_POST) && $_POST['marking']=="1"){
@@ -171,16 +163,14 @@ class ShellController extends Zend_Controller_Action{
 			}else{
 				
 				/*	QuizAttempt isn't finished... Fetch a questionBase */
-				$vQuestionBase =  Model_Shell_QuestionChooser::select_next_question($mQuizAttempt, $debug);
+				$vQuestionBase =  Model_Shell_QuestionChooser::select_next_question($mQuizAttempt, true);
 		
 				/* Make a GeneratedQuestion */
 				$vCounter = 0; //Make sure we don't get any fluke no-text answers
 					while($vCounter<3){
 						
-						if( $debug ) {
-							Model_Shell_Debug::getInstance()->log("vQuestionBase: " . isset($vQuestionBase));
-							Model_Shell_Debug::getInstance()->log("Generating... from " . $vQuestionBase->getXml());
-						}
+						Model_Shell_Debug::getInstance()->log("vQuestionBase: " . isset($vQuestionBase));
+						Model_Shell_Debug::getInstance()->log("Generating... from " . $vQuestionBase->getXml());
 						
 						$vGen = Model_Quiz_GeneratedQuestion::fromQuestionBase($vQuestionBase);
 				
