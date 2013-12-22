@@ -145,7 +145,7 @@ class ShellController extends Zend_Controller_Action{
 		/*	We have our quizAttempt ready to go. Now we look to see if we're resuming a question or not */
 	
 		$mQuestionAttempt = $mQuizAttempt->getLastIncompleteQuestion();
-		if($mQuestionAttempt!=null){
+		if( $mQuestionAttempt!=null || !is_object($mQuestionAttempt) ){
 		
 			/*	Are we getting an ANSWER for this question? */
 			if(array_key_exists("marking", $_POST) && $_POST['marking']=="1"){

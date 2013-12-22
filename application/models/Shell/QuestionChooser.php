@@ -124,9 +124,7 @@ class Model_Shell_QuestionChooser{
 				$vTotal=0;
 				$vTotalRight=0;
 				
-				if( $debug ) {
-					echo "Checking your previous attempts...Size of vQuestionAttempts:".sizeof($vQuestionAttempts)."\n";
-				}
+				Model_Shell_Debug::getInstance()->log("Checking your previous attempts...Size of vQuestionAttempts:".sizeof($vQuestionAttempts));
 				
 				foreach($vQuestionAttempts as $vQA){
 					$vQB = $vQA->getQuestion_base();

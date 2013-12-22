@@ -31,7 +31,7 @@ class Model_Shell_Debug {
 	 * This isn't really good practice, but since Zend 1 lacks any real concepts of Dependency Injection...
 	 */
 	protected function __construct() {
-		if( Zend_Auth::getInstance()->hasIdentity() ) {
+		if(php_sapi_name() != "cli" && Zend_Auth::getInstance()->hasIdentity() ) {
 			$filename = preg_replace("/^[A-Za-z0-9]+$/", "", Zend_Auth::getInstance()->getIdentity()->username);
 			$filename = time() . "_" . $filename;
 		}else{

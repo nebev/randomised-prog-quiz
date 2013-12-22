@@ -30,10 +30,18 @@
 		private $mAltAnswers;
 		private $mActualAnswer;
 		
-		
+		/**
+		 * Create a new Question from a passed XML File
+		 * @param string $vFileName
+		 * @throws Exception
+		 */
 		public function __construct($vFileName){
 			Model_Shell_Debug::getInstance()->log("Attempting to create generic question from XML File $vFileName");
-			$this->mFileContents = Model_XML_Parser::xml2array($vFileName);
+			$file_contents = Model_XML_Parser::xml2array($vFileName);
+			if( !is_array($file_contents) || sizeof($file_contents) == 0 ) {
+				throw new Exception("Could not parse XML File " . $vFileName);
+			}
+			$this->mFileContents = $file_contents;
 			$this->mFileName = $vFileName;
 			$this->mSubstitutions = array();
 			$this->mAltAnswers = array();
@@ -67,7 +75,11 @@
 			return $this->mFileContents['question']['difficulty'];
 		}
 		
-		
+		/**
+		 * Gets the instructions for this question.
+		 * Substitutions will be loaded at this point
+		 * @return mixed
+		 */
 		public function getInstructions(){
 			$vInstr = $this->mFileContents['question']['instructions'];
 			
@@ -87,6 +99,10 @@
 			return false;
 		}
 		
+		/**
+		 * Generates the Problem
+		 * @return string
+		 */
 		public function getProblem(){
 			/*
 				Return the generated problem to be displayed
@@ -187,7 +203,10 @@
 		
 		
 		
-			
+		/**
+		 * Compiles the question and returns the correct output
+		 * @return string
+		 */
 		public function getCorrectOutput(){
 			if(isset($this->mActualAnswer)){
 				return $this->mActualAnswer;
@@ -202,7 +221,11 @@
 		
 		
 		
-		//Getting answers
+		/**
+		 * Gets Multiple choice answers.
+		 * If the question is not multiple choice, NULL is returned
+		 * @return NULL|multitype:string|multitype:multitype:string Results will be an array. Each array element may either be a string, or another array ([0] => Answer, [1] => Why the answer is wrong)
+		 */
 		public function getAnswers(){
 			if($this->getFriendlyType()!="multiple"){
 				return null;
@@ -230,12 +253,8 @@
 				}else{
 					$this->mAltAnswers[] = $this->generateAnswer($i);
 				}
-				
-				
 			}
-			
 			return $this->mAltAnswers;
-			
 		}
 		
 		

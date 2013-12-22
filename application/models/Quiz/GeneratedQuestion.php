@@ -120,7 +120,11 @@ class Model_Quiz_GeneratedQuestion
 		}
 	}
 	
-	
+	/**
+	 * Generates a new Question from the Question Base object provided
+	 * @param Model_Quiz_QuestionBase $vQB
+	 * @return Model_Quiz_GeneratedQuestion NULL if not defined
+	 */
 	public static function fromQuestionBase($vQB){
 		$db = Zend_Registry::get("db");
 		
@@ -280,7 +284,12 @@ class Model_Quiz_GeneratedQuestion
 	
 
 
-
+	/**
+	 * Add an alternate (Multiple Choice) answer to this question
+	 * @param int $vNum The alternate answer number (1-3)
+	 * @param string $vAns The actual answer as a string
+	 * @param string $vDesc The reason why this answer is wrong
+	 */
 	public function addAlternateAnswer($vNum, $vAns, $vDesc){
 		$db = Zend_Registry::get("db");
 		if($vDesc!="" && $vDesc!=null){

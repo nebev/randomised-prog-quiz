@@ -18,7 +18,6 @@
  **/
 
 /*
-*		Email: ben@nebev.net
 * -------------------------------------------------------
 * CLASSNAME:        Model_Quiz_Question
 * CORRESPONDING MYSQL TABLE:  question_base
@@ -50,19 +49,23 @@ class Model_Quiz_Question
 	// **********************
 	// CONSTRUCTORS (GENERIC)
 	// **********************
-	
+	/**
+	 * Generates a question from the numeric identifier passed
+	 * @param int $vID
+	 * @return NULL|Model_Quiz_Question
+	 */
 	public static function fromID($vID){
 		//Start by making sure the appropriate record exists
 		$db = Zend_Registry::get("db");
 		
-		$result = $db->query("SELECT * FROM Question where question_id=".$db->quote($vID));
+		$result = $db->query("SELECT * FROM question_base where question_id=".$db->quote($vID));
 		$row = $result->fetch();
 		if($row['question_id']==null){
 			return null; //No corresponding record found in database
 		}
 		
 		//Assuming we have the appropriate records
-		$vReturn = new Question();
+		$vReturn = new self();
 		$vReturn->question_id = $row['question_id'];
 		$vReturn->xml = $row['xml'];
 		$vReturn->difficulty = $row['difficulty'];
@@ -72,22 +75,22 @@ class Model_Quiz_Question
 	}
 	
 
+	/**
+	 * Adds a new question from scratch
+	 * @param string $xml
+	 * @param int $difficulty
+	 * @param string $added_on should be in YYYY-MM-DD Format
+	 * @return Question|Null
+	 */
 	public static function fromScratch($xml,$difficulty,$added_on){
-		$db = Zend_Registry::get("db");
-		$sql = "INSERT INTO Question(question_id,xml,difficulty,added_on) VALUES(NULL, ".$db->quote($xml).",".$db->quote($difficulty).",".$db->quote($added_on).")";
+		$db = Zend_Registry::get("db"); /* @var $db Zend_DB_Adapter_Abstract */
+		$sql = "INSERT INTO question_base(question_id,xml,difficulty,added_on) VALUES(NULL, ".$db->quote($xml).",".$db->quote($difficulty).",".$db->quote($added_on).")";
+		
+		$db->beginTransaction();
 		$db->query($sql);
-		
-		//Now find the appropriate entry in the database
-		//	A safe (default) assumption for this is a query that looks for everything you just put in.
-		
-		$sql = "SELECT question_id FROM Question WHERE xml=".$db->quote($xml)." AND difficulty=".$db->quote($difficulty)." AND added_on=".$db->quote($added_on);
-		$result = $db->query($sql);
-		$row = $result->fetch();
-		if($row['question_id']!=null){
-			return Model_Quiz_Question::fromID($row['question_id']);
-		}else{
-			return null; //Something didn't happen
-		}
+		$last_insert_id = $db->lastInsertId();
+		$db->commit();
+		return Model_Quiz_Question::fromID($last_insert_id);
 	}
 
 	// **********************
@@ -131,15 +134,6 @@ class Model_Quiz_Question
 		$sql = " UPDATE question_base SET  xml = '$this->xml',difficulty = '$this->difficulty',added_on = '$this->added_on' WHERE question_id = $id ";
 		$result = $db->query($sql);
 	}
-
-
-
-	// **********************
-	// OTHER METHODS (SPEIFIC)
-	// **********************
-
-
-
 
 
 } // class Model_Quiz_Question : end
