@@ -191,7 +191,7 @@ class IndexController extends Zend_Controller_Action {
 		
 					//Truncate the array if necessary
 					if(sizeof($vPassed) > MAX_HALLOFFAME){
-						array_splice($vPassed,$mTotalTopScores);
+						array_splice($vPassed, 0, MAX_HALLOFFAME);
 					}
 			
 					// And now record the scores
