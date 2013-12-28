@@ -140,6 +140,22 @@ class Model_Quiz_GeneratedQuestion
 		return self::generateNewFromQuestionBase($vQB);	//Return a new generated question as there are no spares in the database
 	}
 	
+	
+	/**
+	 * This will remove ALL pre-generated questions that haven't been used in a quiz
+	 */
+	public static function removePregeneratedQuestions() {
+		$db = Zend_Registry::get("db"); /* @var $db Zend_DB_Adapter_Abstract */
+		Model_Shell_Debug::getInstance()->log("Removing all Pre-generated questions");
+		$rows = $db->query("SELECT generated_id FROM generated_questions 
+			WHERE generated_id NOT IN(SELECT generated_questionsgenerated_id AS generated_id FROM question_attempt)")->fetchAll();
+		
+		foreach($rows as $row) {
+			$db->delete("generated_questions", "generated_id = " . $db->quote($row['generated_id']));
+		}
+	}
+	
+	
 	/**
 	 * This will generate a brand new question from a question base.
 	 * Unlike fromQuestionBase(), this method will NOT consult the database for question first
@@ -198,7 +214,6 @@ class Model_Quiz_GeneratedQuestion
 								
 							$vNum++;
 						}
-						$question_counter++;
 			
 					}else{
 						$error_counter++;

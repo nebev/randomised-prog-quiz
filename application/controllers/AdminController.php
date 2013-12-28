@@ -356,6 +356,7 @@ class AdminController extends Zend_Controller_Action {
 
 	/**
 	 * This function rebuilds XML files
+	 * In doing so, all pre-generated questions will be removed.
 	 */
 	public function rebuildxmlAction() {
 		$process = $this->_getParam("process");
@@ -420,13 +421,10 @@ class AdminController extends Zend_Controller_Action {
 					}
 			    }
 				closedir($handle);
-			}
-			
-			
-			
-		}
 				
-		
+				Model_Quiz_GeneratedQuestion::removePregeneratedQuestions();	// Remove all Pre-Generated questions, so as to not cause any conficts
+			}			
+		}
 	}
 
  
