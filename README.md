@@ -150,12 +150,15 @@ Other Parts that you'll *definitely* have to modify include:
 	- I also recommend setting <code>ldap.usessl</code> and <code>ldap.usetls</code> to <code>0</code> when testing your initial setup.
 	- Remember though, that after you verified that authentication works, you should change these back to <code>1</code>
 
-#### 6. Testing the initial page
+#### 6. Populate the 'xml' directory
+Some sample XML files are provided in the `xml-samples` directory. Simply copy this directory and paste it with the name of `xml`. Then tweak the xml files in the `xml` directory as desired.
+
+#### 7. Testing the initial page
 Start by navigating your browser (preferably on a client machine) to the address of the Server. If you're using FQDNs and DNS is all working, it should be what you set <code>ServerName</code> in Installation Step 3.
 
 If all has gone according to plan, you should see the welcome page (well done). If not, then see the troubleshooting section.
 
-#### 7. Configuring LDAPS
+#### 8. Configuring LDAPS
 Once you're up and running with unsecured LDAP, the time will come when you want to change the configuration to Secured LDAP (LDAPS). The appropriate options are in <code>application.ini</code> under the <code>ldap</code> section.
 However, usually on Linux and Windows boxes, it's not a simple case of just enabling these things, due to the fact that LDAPS requires signed certificates.
 
